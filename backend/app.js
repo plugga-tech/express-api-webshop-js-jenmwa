@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const mongoose = require('mongoose');
+
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -11,6 +11,8 @@ const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 
 const app = express();
+
+const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/jenny-waller', {
    useUnifiedTopology: true
