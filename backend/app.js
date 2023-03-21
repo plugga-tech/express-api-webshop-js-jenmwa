@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -15,8 +15,8 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/jenny-waller', {
-   useUnifiedTopology: true
+mongoose.connect(process.env.MONGODB_URI + 'jenny-waller', {
+  useUnifiedTopology: true
 })
 .then (() => {
   console.log('We´re connected to the database!');
