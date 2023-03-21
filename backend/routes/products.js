@@ -3,7 +3,7 @@ const productsModels = require("../models/products-models");
 const router = express.Router();
 
 // HÄMTA ALLA PRODUKTER
-router.get("/", async (req, response, next) => {
+router.get("/", async (request, response, next) => {
   try {
     const products = await productsModels.find();
     if (!products) {
@@ -36,10 +36,16 @@ router.get("/:id", async (request, response, next) => {
 router.post("/add", async (request, response, next) => {
   try {
     let addedProduct = await productsModels.create(request.body);
-    response.status(201).json(addedProduct);
+
+    if(!addedProduct.token) {
+      response.status(401).json({message: "Unauthorized"})
+    }
+    else {
+      response.status(201).json(addedProduct);
+    }
   } catch (error) {
     console.error(error.message)
-    res.status(500).json({ error: "Error" });
+    response.status(500).json({ error: "Error" });
   }
 });
 
