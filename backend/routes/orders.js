@@ -1,11 +1,8 @@
 var express = require('express');
-const productsModels = require('../models/products-models');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', async (req, res, next) => {
-  const products = await productsModels.find();
-  
+router.get('/', async (req, response, next) => {
   res.send('respond with a resource from orders');
 });
 
