@@ -8,9 +8,13 @@ const userModels = require("../models/users-models");
 router.get("/", async (req, res, next) => {
   try {
     const users = await userModels.find().select("name email");
+    if (!users) {
+      res.status(404).json({ message: "No Users found" });
+      return;
+    }
     res.status(200).json(users);
   } catch (error) {
-    console.log("error", error);
+    console.error(error.message);
     res.status(500).json({ error: "Error" });
   }
 });
@@ -30,7 +34,7 @@ router.post("/", async (req, res, next) => {
     res.status(201).json(user);
     
   } catch (error) {
-    console.log("error", error);
+    console.error(error.message)
     res.status(500).json({ error: "Error" });
   }
 });
@@ -48,7 +52,7 @@ router.post("/add", async (request, response, next) => {
     const addedUser = await userModels.create(newUser);
     response.status(201).json(addedUser);
   } catch (error) {
-    console.log("error", error);
+    console.error(error.message)
     response.status(500).json({ error: "Error" });
   }
 });
@@ -72,7 +76,7 @@ router.post("/login", async (request, response, next) => {
       response.status(401).json({ error: "Invalid password" });
     }
   } catch (error) {
-    console.log("error", error);
+    console.error(error.message);
     response.status(500).json({ error: "Error" });
   }
 });

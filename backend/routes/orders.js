@@ -21,7 +21,7 @@ router.get("/all", async (request, response, next) => {
     if (!orders) {
       return response.status(404).json({ message: "No orders found" });
     }
-    response.status(201).json(orders);
+    response.status(200).json(orders);
   } catch (error) {
     console.error(error.message);
     response.status(500).json({ message: "Error" });
