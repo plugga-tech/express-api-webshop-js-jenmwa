@@ -1,6 +1,7 @@
 const express = require("express");
 const productsModels = require("../models/products-models");
 const router = express.Router();
+require('dotenv').config();
 
 // HÄMTA ALLA PRODUKTER
 router.get("/", async (request, response, next) => {
@@ -16,6 +17,7 @@ router.get("/", async (request, response, next) => {
   }
 });
 
+// HÄMTA SPECIFIK PRODUKT
 router.get("/:id", async (request, response, next) => {
   try {
     const id = request.params.id;
@@ -33,20 +35,58 @@ router.get("/:id", async (request, response, next) => {
   }
 });
 
-router.post("/add", async (request, response, next) => {
-  try {
-    let addedProduct = await productsModels.create(request.body);
+// router.post("/add", async (request, response, next) => {
+//   try {
+//     let addedProduct = await productsModels.create(request.body);
 
-    if(!addedProduct.token) {
-      response.status(401).json({message: "Unauthorized"})
-    }
-    else {
-      response.status(201).json(addedProduct);
-    }
+//     if(!addedProduct.token) {
+//       response.status(401).json({message: "Unauthorized"})
+//     }
+//     else {
+//       response.status(201).json(addedProduct);
+//     }
+//   } catch (error) {
+//     console.error(error.message)
+//     response.status(500).json({ error: "Error" });
+//   }
+// });
+
+// SKAPA PRODUKT // UTAN TOKEN SÅ SKALL ANROPET MISSLYCKAS = 401
+router.post("/add", async (request, response, next) => {
+    try {
+      const { token } = request.body;
+      const userToken = process.env.ADMIN_TOKEN;
+      console.log('userToken', userToken);
+      
+      if (token !== userToken) {
+        response.status(401).json({message: "Unauthorized"});
+      } else {
+        const addedProduct = await productsModels.create(request.body);
+        response.status(201).json(addedProduct);
+      }
   } catch (error) {
     console.error(error.message)
     response.status(500).json({ error: "Error" });
   }
 });
+
+// HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
+router.get("/category/:id", async (request, response, next) => {
+  try {
+    const categoryId = request.params.id;
+    console.log(categoryId)
+    const categoryProducts = await productsModels.find({ category: categoryId });
+
+    if (categoryProducts.length === 0) {
+      return response.status(404).json({ message: "categoryProducts not found" });
+    }
+    response.status(200).json(categoryProducts);
+  }
+  catch (error) {
+    console.error(error.message)
+    response.status(500).json({ error: "Error" });
+  }
+})
+
 
 module.exports = router;

@@ -3,7 +3,7 @@ const categoryModels = require("../models/category-models");
 const router = express.Router();
 
 
-/* GET home page. */
+// HÄMTA ALLA KATEGORIER 
 router.get("/", async (request, response, next) => {
   try {
     const categories = await categoryModels.find();
@@ -17,14 +17,39 @@ router.get("/", async (request, response, next) => {
   }
 });
 
+
+
+
+
+// SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401
+// router.post("/add", async (request, response, next) => {
+//   try {
+//     let addCategory = await categoryModels.create(request.body);
+
+//     if(!addCategory.token) {
+//       response.status(401).json({message: "Unauthorized"})
+//     }
+//     else {
+//       response.status(201).json(addCategory);
+//     }
+//   } catch (error) {
+//     console.error(error.message)
+//     response.status(500).json({ error: "Error" });
+//   }
+// });
+
+// SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401
 router.post("/add", async (request, response, next) => {
   try {
-    let addCategory = await categoryModels.create(request.body);
+		const { token } = request.body;
+		const userToken = process.env.ADMIN_TOKEN;
+		console.log('userToken', userToken);
 
-    if(!addCategory.token) {
-      response.status(401).json({message: "Unauthorized"})
+    if (token !== userToken) {
+			response.status(401).json({message: "Unauthorized"});
     }
     else {
+			let addCategory = await categoryModels.create(request.body);
       response.status(201).json(addCategory);
     }
   } catch (error) {

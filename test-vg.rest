@@ -51,7 +51,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/64198cb219f2a3a8c86dce73
+GET http://localhost:3000/api/products/
 
 ###
 
@@ -60,18 +60,18 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 4",
+  "name": "Produkt 5",
   "description": "Beskrivning av produkt 1",
   "price": 100,
   "lager": 10,
-  "category": "// ID PÅ EN SPECIFIK KATEGORI",
+  "category": "641a29165a7a4aecee1a38b8",
   "token": "1234key1234"
 }
 
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/ // ID PÅ EN SPECIFIK KATEGORI
+GET http://localhost:3000/api/products/category/641a29165a7a4aecee1a3878
 ###
 
 //
@@ -84,7 +84,7 @@ POST http://localhost:3000/api/categories/add
 Content-Type: application/json
 
 {
-  "name": "Kategori 1",
+  "name": "Kategori 3",
   "token": "1234key1234"
 }
 
@@ -99,6 +99,7 @@ GET http://localhost:3000/api/categories
 // API ENDPOINTS ORDERS
 //
 
+//BÖRJA HÄR 220322
 // HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS
 GET http://localhost:3000/api/orders/all/ // API TOKEN
 
