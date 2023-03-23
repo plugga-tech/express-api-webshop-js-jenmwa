@@ -1,0 +1,102 @@
+$primaryFont: 'Krub', sans-serif;
+$secondaryFont: 'Marcellus', serif;
+
+$primaryColorLight: #d5ced2;
+$secondaryColorLight: #d9d2d5;
+$baseColor: #8c8b84;
+$primaryColorDark: #827c71;
+$secondaryColorDark: #33312a;
+
+body {
+    background-color: $primaryColorLight;
+    font-family: $primaryFont;
+    color: $secondaryColorDark;
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    padding: 1rem 2rem;
+    max-width: 100%;
+
+    ul {
+        margin: 0 0 2rem 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+
+        li {
+            list-style: none;
+
+            button {
+                background-color: transparent;
+                border: transparent;
+                color: $secondaryColorDark;
+
+                &:hover {
+                    background-color: transparent;
+                }
+               
+            }
+            .material-symbols-outlined {
+                font-size: 2rem;
+            }
+
+        }
+    }
+  
+}
+
+button {
+    cursor: pointer;
+    width: 75px;
+    padding: 0.5rem 0;
+    background-color: whitesmoke;
+    font-weight: bold;
+
+    &:hover {
+        background-color: $secondaryColorLight;
+    }
+}
+
+.inputForm {
+    background-color:$baseColor;
+    padding: 1rem 2rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    
+        input {
+          position: absolute;
+          margin-left: 0.5rem;
+          width: 300px;
+          left: 100px;
+        }
+    }
+}
+
+.quoteDiv {
+    font-style: italic;
+    font-family: $secondaryFont;
+    text-align: center;
+}
+
+.heroSection {
+    display: flex;
+    flex-direction: column;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/frontend/public/hero.jpg');
+    height: 50vh;
+    align-self: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+    }
+    
+}
