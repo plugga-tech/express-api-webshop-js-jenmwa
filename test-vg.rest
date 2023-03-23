@@ -51,7 +51,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/
+GET http://localhost:3000/api/products/641c16695a5281786c8bee08
 
 ###
 
@@ -71,7 +71,7 @@ Content-Type: application/json
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/641a29165a7a4aecee1a3878
+GET http://localhost:3000/api/products/category/641a29165a7a4aecee1a38b8
 ###
 
 //
@@ -118,12 +118,12 @@ Content-Type: application/json
   "user": "6419e3d6d8ba48259cd3e5bf",
       "products": [
     {
-      "productId": "641c16705a5281786c8bee0a",
-      "quantity": 3
+      "productId": "641c78647002016c0c3c79cf",
+      "quantity": 4
     },
     {
-      "productId": "641c167a5a5281786c8bee0c",
-      "quantity": 4
+      "productId": "641c786c7002016c0c3c79d1",
+      "quantity": 2
     }
   ]
 }

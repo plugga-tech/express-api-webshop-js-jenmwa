@@ -32,9 +32,8 @@ router.post("/", async (req, res, next) => {
       return;
     }
     res.status(201).json(user);
-    
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
     res.status(500).json({ error: "Error" });
   }
 });
@@ -42,6 +41,12 @@ router.post("/", async (req, res, next) => {
 // SKAPA USER
 router.post("/add", async (request, response, next) => {
   try {
+    const existingUser = await userModels.findOne({
+      email: request.body.email,
+    });
+    if (existingUser) {
+      return response.status(400).json({ error: "User already exists" });
+    }
     let newUser = {
       name: request.body.name,
       email: request.body.email,
@@ -52,7 +57,7 @@ router.post("/add", async (request, response, next) => {
     const addedUser = await userModels.create(newUser);
     response.status(201).json(addedUser);
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
     response.status(500).json({ error: "Error" });
   }
 });
