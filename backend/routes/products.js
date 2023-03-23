@@ -1,7 +1,7 @@
 const express = require("express");
 const productsModels = require("../models/products-models");
 const router = express.Router();
-require('dotenv').config();
+// require('dotenv').config();
 
 // HÄMTA ALLA PRODUKTER
 router.get("/", async (request, response, next) => {
