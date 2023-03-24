@@ -2,10 +2,11 @@ console.log("script is connected!");
 
 const userFormDiv = document.querySelector("#userFormDiv");
 const logInSignIn = document.querySelector("#logInSignIn");
-const quoteDiv = document.querySelector('#quoteDiv');
+const quoteDiv = document.querySelector("#quoteDiv");
 
 const inputForm = document.createElement("div");
 const userNameInput = document.createElement("input");
+const userEmailInput = document.createElement("input");
 const userPasswordInput = document.createElement("input");
 const userInlogBtn = document.createElement("button");
 
@@ -17,8 +18,8 @@ inputForm.setAttribute("id", "inputForm");
 
 let inputFormVisible = false;
 
-const loggedInUser = localStorage.getItem('userName');
-if (loggedInUser ) {
+const loggedInUser = localStorage.getItem("userName");
+if (loggedInUser) {
   quoteDiv.innerText = `Welcome ${loggedInUser}`;
 } else {
   quoteDiv.innerHTML = '"Beauty is in the eye of the beholder."';
@@ -28,10 +29,9 @@ function handleLogin() {
   console.log("click");
   inputFormVisible = !inputFormVisible;
 
-  const loggedInUser = localStorage.getItem('userName');
+  const loggedInUser = localStorage.getItem("userName");
   if (loggedInUser) {
     logoutSection();
-
   } else {
     renderInputField();
   }
@@ -43,12 +43,11 @@ function handleLogin() {
   }
 }
 
-logInSignIn.addEventListener('click', handleLogin);
+logInSignIn.addEventListener("click", handleLogin);
 
-// logInSignIn.addEventListener("click", () => {
-
-//   renderInputField();
-// });
+/*******************************************************************
+ ******************** LOG IN SECTION ****************************** 
+ *******************************************************************/
 
 function renderInputField() {
   if (inputFormVisible) {
@@ -56,16 +55,15 @@ function renderInputField() {
     inputForm.style.display = "block";
     inputForm.innerHTML = "";
 
-    const userNameLabel = document.createElement("label");
+    const userEmailLabel = document.createElement("label");
     const userPasswordLabel = document.createElement("label");
-    userNameLabel.textContent = "email: ";
+    userEmailLabel.textContent = "email: ";
     userPasswordLabel.textContent = "password: ";
 
     userInlogBtn.setAttribute("id", "userLoginBtn");
     userInlogBtn.setAttribute("class", "logged-out");
     userInlogBtn.disabled = true;
 
-    
     goToSignUpBtn.setAttribute("id", "goToSignUpBtn");
     goToSignUpBtn.setAttribute("class", "goToBtn");
 
@@ -73,8 +71,8 @@ function renderInputField() {
     textDisclaimer.textContent = "Want to create an account?";
     goToSignUpBtn.textContent = " SIGN UP >> ";
 
-    inputForm.appendChild(userNameLabel);
-    userNameLabel.appendChild(userNameInput);
+    inputForm.appendChild(userEmailLabel);
+    userEmailLabel.appendChild(userEmailInput);
     inputForm.appendChild(userPasswordLabel);
     userPasswordLabel.appendChild(userPasswordInput);
 
@@ -85,30 +83,34 @@ function renderInputField() {
     userFormDiv.appendChild(inputForm);
 
     function checkInput() {
-      const name = userNameInput.value;
+      const email = userEmailInput.value;
       const password = userPasswordInput.value;
 
-      if (name && password) {
+      if (email && password) {
         userInlogBtn.disabled = false;
         userInlogBtn.classList.add("btnOk");
       } else {
         userInlogBtn.disabled = true;
       }
     }
-    userNameInput.addEventListener("input", checkInput);
+    userEmailInput.addEventListener("input", checkInput);
     userPasswordInput.addEventListener("input", checkInput);
-  } 
-  else {
+  } else {
     logInSignIn.innerHTML = "person";
     inputForm.style.display = "none";
   }
 
-  userInlogBtn.addEventListener("click", () => {
-    console.log('logga in')
+  goToSignUpBtn.addEventListener("click", signUpSection);
+
+
+  userInlogBtn.addEventListener("click", userLogin)
+  
+  function userLogin() {
+    console.log("logga in");
     let loginUser = {
-      email: userNameInput.value,
-      password: userPasswordInput.value
-    }
+      email: userEmailInput.value,
+      password: userPasswordInput.value,
+    };
     console.log(loginUser);
 
     fetch("http://localhost:3000/api/users/login", {
@@ -116,44 +118,71 @@ function renderInputField() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(loginUser)
+      body: JSON.stringify(loginUser),
     })
-    .then(result => result.json())
-    .then(data => {
-      console.log(data)
-      if(data.email) {
-        console.log(data.email)
-        quoteDiv.innerHTML = `Welcome ${data.email}`;
-        localStorage.setItem("userName", loginUser.email);
-        userFormDiv.innerHTML = "";
-        logInSignIn.innerHTML = "person";
-        inputForm.innerHTML = "";
-        logoutSection() 
-        // renderLoggedInDiv(loginUser);
+    .then((respons) => {
+      if (!respons.ok) {
+        throw new Error(respons.statusText);
       }
-      else {
-        console.log('login failed.')
-
-      }
-
+      return respons.json();
     })
-
-  })
-
+      .then((data) => {
+        console.log(data);
+        if (data.email) {
+          console.log(data.email);
+          quoteDiv.innerHTML = `Welcome ${data.email}`;
+          localStorage.setItem("userName", loginUser.email);
+          logInSignIn.innerHTML = "person";
+          inputForm.innerHTML = "";
+          logoutSection();
+          // renderLoggedInDiv(loginUser);
+        } else {
+          console.log("login failed.");
+        }
+      }).catch((error) => {
+        console.error(error);
+        handleLoginError(error.message);
+      });
+  };
 }
 
 
+function handleLoginError(errorMessage) {
+  const errorDiv = document.createElement('div');
+  errorDiv.setAttribute('class', 'loginErrorDiv');
+
+  let errorDivContent = `
+    <h2>Error!</h2>
+    <p>${errorMessage}</p>
+    <p>Please try again with a different email address.</p>
+    <p> Go back to <button id="logInBtn" class="goToBtn"> LOG IN >> </button>
+  `;
+  errorDiv.innerHTML = errorDivContent;
+
+  inputForm.innerHTML = '';
+  inputForm.appendChild(errorDiv);
+
+  const backToLoginBtn = document.querySelector('#logInBtn');
+  backToLoginBtn.addEventListener('click', () => {
+    console.log('go back to log in');
+    renderInputField();
+  })
+}
+/*******************************************************************
+ ******************** LOG OUT SECTION ****************************** 
+ *******************************************************************/
+
 function logoutSection() {
   if (inputFormVisible) {
-
     logInSignIn.innerHTML = "CLOSE";
     inputForm.style.display = "block";
     inputForm.innerHTML = "";
 
-    const userThings = document.createElement('p');
-    
-    goToSignUpBtn.setAttribute("id", "goToSignUpBtn");
-    goToSignUpBtn.setAttribute("class", "logoutBtn");
+    const userThings = document.createElement("p");
+
+    const logOutBtn = document.createElement("button");
+    logOutBtn.setAttribute("id", "logOutBtn");
+    logOutBtn.setAttribute("class", "logoutBtn");
 
     textDisclaimer.textContent = "YOUR ACCOUNT: ";
     userThings.innerHTML = `
@@ -162,27 +191,186 @@ function logoutSection() {
     My Settings <br><br>
     `;
 
-    goToSignUpBtn.textContent = "LOG OUT >> ";
+    logOutBtn.textContent = "LOG OUT >> ";
 
     inputForm.appendChild(textDisclaimer);
     textDisclaimer.appendChild(userThings);
-    userThings.appendChild(goToSignUpBtn);
+    userThings.appendChild(logOutBtn);
     userFormDiv.appendChild(inputForm);
-  }
-  else {
+
+    logOutBtn.addEventListener("click", logoutHandler);
+  } else {
     logInSignIn.innerHTML = "person";
     inputForm.style.display = "none";
   }
+}
 
-  goToSignUpBtn.addEventListener('click', () => {
-    console.log('LOG OUT & REMOVE NAME LOCALSTORAGE');
-    localStorage.removeItem('userName');
-    userFormDiv.innerHTML = '';
-    userNameInput.value ='';
-    userPasswordInput.value = '';
-    quoteDiv.innerHTML = '';
-    quoteDiv.innerHTML = '"Beauty is in the eye of the beholder."';
-    handleLogin();
+function logoutHandler() {
+  console.log("LOG OUT & REMOVE NAME LOCALSTORAGE");
+  localStorage.removeItem("userName");
+  userFormDiv.innerHTML = "";
+  userNameInput.value = "";
+  userPasswordInput.value = "";
+  quoteDiv.innerHTML = "";
+  quoteDiv.innerHTML = '"Beauty is in the eye of the beholder."';
+  handleLogin();
+}
 
+// goToSignUpBtn.addEventListener("click", signUpSection);
+
+/*******************************************************************
+ ******************** SIGN UP SECTION ****************************** 
+ *******************************************************************/
+
+function signUpSection() {
+  console.log("go to signup");
+
+  inputForm.style.display = "block";
+  inputForm.innerHTML = "";
+
+  const userNameLabel = document.createElement("label");
+  const userEmailLabel = document.createElement("label");
+  const userPasswordLabel = document.createElement("label");
+  const userCreateBtn = document.createElement("button");
+
+  userNameLabel.textContent = "name: ";
+  userEmailLabel.textContent = "email: ";
+  userPasswordLabel.textContent = "password: ";
+
+  userCreateBtn.setAttribute("id", "userCreateBtn");
+  userCreateBtn.setAttribute("class", "logged-out");
+  userCreateBtn.disabled = true;
+
+  const gotoLogInBtn = document.createElement('button')
+
+  gotoLogInBtn.setAttribute("id", "gotoLogInBtn");
+  gotoLogInBtn.setAttribute("class", "goToBtn");
+
+  userCreateBtn.textContent = "CREATE ACCOUNT";
+  textDisclaimer.textContent = "Already have an account?";
+  gotoLogInBtn.textContent = " LOG IN >> ";
+
+  inputForm.appendChild(userNameLabel);
+  userNameLabel.appendChild(userNameInput);
+  inputForm.appendChild(userEmailLabel);
+  userEmailLabel.appendChild(userEmailInput);
+  inputForm.appendChild(userPasswordLabel);
+  userPasswordLabel.appendChild(userPasswordInput);
+
+  inputForm.appendChild(userCreateBtn);
+  inputForm.appendChild(textDisclaimer);
+  textDisclaimer.appendChild(gotoLogInBtn);
+
+  userFormDiv.appendChild(inputForm);
+
+  function checkInput() {
+    const name = userNameInput.value;
+    const password = userPasswordInput.value;
+    const email = userEmailInput.value;
+
+    if (name && password && email) {
+      userCreateBtn.disabled = false;
+      userCreateBtn.classList.add("btnOk");
+    } else {
+      userCreateBtn.disabled = true;
+    }
+  }
+  userNameInput.addEventListener("input", checkInput);
+  userPasswordInput.addEventListener("input", checkInput);
+  userEmailInput.addEventListener("input", checkInput);
+
+  userCreateBtn.addEventListener("click" ,createUser);
+
+  gotoLogInBtn.addEventListener('click', renderInputField);
+  
+}
+
+/*******************************************************************
+ ****************** CREATE USER SECTION **************************** 
+ *******************************************************************/
+
+ function createUser() {
+  console.log("create");
+
+  let newUser = {
+    name: userNameInput.value,
+    email: userEmailInput.value,
+    password: userPasswordInput.value
+  };
+
+  console.log(newUser);
+
+  fetch("http://localhost:3000/api/users/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newUser),
+  })
+    .then((respons) => {
+      if (!respons.ok) {
+        throw new Error(respons.statusText);
+      }
+      return respons.json();
+    })
+    .then((data) => {
+      console.log(data);
+       signUpOk(newUser);
+    })
+    .catch((error) => {
+      console.error(error);
+      handleSignUpError(error.message);
+    });
+
+  userNameInput.value = "";
+  userPasswordInput.value = "";
+  userEmailInput.value = "";
+} 
+
+function handleSignUpError(errorMessage) {
+  const errorDiv = document.createElement('div');
+  errorDiv.setAttribute('class', 'signUpErrorDiv');
+
+  let errorDivContent = `
+    <h2>Error!</h2>
+    <p>${errorMessage}</p>
+    <p>Please try again with a different email address.</p>
+    <p> Go back to <button id="backToSignUpBtn" class="goToBtn"> SIGN UP >> </button>
+  `;
+  errorDiv.innerHTML = errorDivContent;
+
+  inputForm.innerHTML = '';
+  inputForm.appendChild(errorDiv);
+
+  const backToSignUpBtn = document.querySelector('#backToSignUpBtn');
+  backToSignUpBtn.addEventListener('click', () => {
+    console.log('go back to sign up');
+    signUpSection();
   })
 }
+
+function signUpOk(newUser) {
+  logInSignIn.innerHTML = "CLOSE";
+  inputForm.style.display = "block";
+  inputForm.innerHTML = "";
+
+  const mainDiv = document.createElement('div');
+  mainDiv.setAttribute('class', 'signUpSuccessfullDiv')
+
+  let mainDivContent = `
+  <h2>Hello ${newUser.name}!</h2>
+  <p>You account was successfully created and you can now log in!</p>
+  <p> Go to <button id="logInBtn" class="goToBtn"> LOG IN >> </button>
+  `
+  mainDiv.innerHTML = mainDivContent;
+
+  inputForm.appendChild(mainDiv);
+
+  const logInBtn = document.querySelector('#logInBtn');
+
+  logInBtn.addEventListener('click', () => {
+    console.log('account created and go to login');
+    renderInputField();
+  })
+}
+ 

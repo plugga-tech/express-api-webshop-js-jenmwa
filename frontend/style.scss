@@ -62,7 +62,13 @@ button {
     &:hover {
         background-color: $secondaryColorLight;
     }
+
+    &.btnOk {
+        border: 2px solid $secondaryColorDark;
+    }
+
 }
+
 
 .inputForm {
     background-color:$baseColor;
@@ -107,11 +113,20 @@ button {
     justify-content: center;
 
     img {
-        width: 100%;
+        width: 80%;
     }
     
 }
 
 .logoutBtn {
     margin-left: 0;
+}
+
+@media screen and (min-width: 768px) {
+    .heroSection {
+        height: 70vh;
+        img {
+            max-width: 60%;
+        }
+    }
 }
