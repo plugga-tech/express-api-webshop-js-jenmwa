@@ -9,7 +9,7 @@ const userNameInput = document.createElement("input");
 const userEmailInput = document.createElement("input");
 const userPasswordInput = document.createElement("input");
 const userInlogBtn = document.createElement("button");
-
+const shopCartBtn = document.querySelector('#shopCartBtn');
 const goToSignUpBtn = document.createElement("button");
 const textDisclaimer = document.createElement("p");
 
@@ -154,7 +154,7 @@ function handleLoginError(errorMessage) {
   let errorDivContent = `
     <h2>Error!</h2>
     <p>${errorMessage}</p>
-    <p>Please try again with a different email address.</p>
+    <p>Woops! Something went wrong. Please try again.</p>
     <p> Go back to <button id="logInBtn" class="goToBtn"> LOG IN >> </button>
   `;
   errorDiv.innerHTML = errorDivContent;
@@ -215,8 +215,6 @@ function logoutHandler() {
   quoteDiv.innerHTML = '"Beauty is in the eye of the beholder."';
   handleLogin();
 }
-
-// goToSignUpBtn.addEventListener("click", signUpSection);
 
 /*******************************************************************
  ******************** SIGN UP SECTION ****************************** 
@@ -286,7 +284,7 @@ function signUpSection() {
 }
 
 /*******************************************************************
- ****************** CREATE USER SECTION **************************** 
+ ****************** CREATEUSER SECTION **************************** 
  *******************************************************************/
 
  function createUser() {
@@ -334,7 +332,7 @@ function handleSignUpError(errorMessage) {
   let errorDivContent = `
     <h2>Error!</h2>
     <p>${errorMessage}</p>
-    <p>Please try again with a different email address.</p>
+    <p>Woops! Something went wrong. Please try again</p>
     <p> Go back to <button id="backToSignUpBtn" class="goToBtn"> SIGN UP >> </button>
   `;
   errorDiv.innerHTML = errorDivContent;
@@ -373,4 +371,124 @@ function signUpOk(newUser) {
     renderInputField();
   })
 }
+
+/*******************************************************************
+ ******************** RENDER CATEGORIES **************************** 
+ *******************************************************************/
  
+ function showCategory() {
+  fetch('http://localhost:3000/api/categories')
+    .then(respons => respons.json())
+    .then(data => {
+      console.log(data)
+      renderCategoryHtml(data);
+    })
+    // .catch((error) => {
+    //   console.error(error);
+    //   handleProductError(error.message);
+    // });
+ }
+
+function renderCategoryHtml(data) {
+  const categorySection = document.querySelector('#categorySection');
+  const categoryMainDiv = document.createElement('div');
+  categoryMainDiv.setAttribute('class', 'categoryMainDiv');
+
+
+  for (let i = 0; i < data.length; i++) {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.innerHTML = `
+      <button>${data[i].name}</button>
+    `;
+    categoryMainDiv.appendChild(categoryDiv);
+  }
+  categorySection.appendChild(categoryMainDiv);
+}
+showCategory() 
+
+/*******************************************************************
+ ******************** RENDER PRODUCTS ****************************** 
+ *******************************************************************/
+
+ function showProducts() {
+  fetch('http://localhost:3000/api/products')
+    .then(respons => respons.json())
+    .then(data => {
+      console.log(data)
+      renderProductsHtml(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      handleProductError(error.message);
+    });
+ }
+
+ function renderProductsHtml(data) {
+  const productSection = document.querySelector('#productSection');
+  productSection.innerHTML = "";
+
+  const mainDivContent = document.createElement('div');
+  mainDivContent.setAttribute('class', 'mainDivContentDiv');
+
+  for (let i = 0; i < data.length; i++) {
+    const productDiv = document.createElement('div');
+    productDiv.setAttribute('class', 'productDiv');
+    productDiv.innerHTML = `
+      <img src="public/img_placeholder.png" width="300"><br>
+      ${data[i].name}<br>
+      Price: ${data[i].price} sek<br>
+      Lager:  ${data[i].lager} in stock<br>
+      <button>BUY NOW</button
+    `
+    const buyButton = productDiv.querySelector('button');
+    buyButton.addEventListener('click', function() {
+      console.log(`You clicked the "BUY NOW" button for product ${data[i].name}`);
+    });
+    
+  mainDivContent.appendChild(productDiv);
+}
+  productSection.appendChild(mainDivContent);
+ }
+
+ //Clickevent köp-knappar
+
+
+ function handleProductError(errormessage) {
+  console.log(errormessage)
+ }
+
+ /*******************************************************************
+ ******************** RENDER SHOPCART ****************************** 
+ *******************************************************************/
+
+
+
+/* <div id="userFormDiv"></div>  */
+function shoppingCart() {
+  userFormDiv.style.display = "block";
+  userFormDiv.innerHTML = "";
+
+const shoppingCartDiv = document.createElement('div');
+shoppingCartDiv.setAttribute('class', 'signUpSuccessfullDiv')
+shoppingCartDiv.innerHTML = 'varukorgen är tom'
+
+// // for (let i = 0; i < data.length; i++) {
+//   const cartDiv = document.createElement('div');
+//   cartDiv.setAttribute('class', 'productDiv');
+//   cartDiv.innerHTML = `
+//   Varukorgen är tom
+//   `
+//   shoppingCartDiv.appendChild(cartDiv);
+// // }
+
+userFormDiv.appendChild(shoppingCartDiv);
+
+}
+
+shopCartBtn.addEventListener('click', () => {
+  console.log('click shopCart');
+  shoppingCart();
+})
+
+
+ showProducts();

@@ -115,11 +115,55 @@ button {
     img {
         width: 80%;
     }
-    
 }
 
 .logoutBtn {
     margin-left: 0;
+}
+
+.categorySection {
+    background-color: $secondaryColorDark;
+    color: $primaryColorLight;
+    display: flex;
+    justify-content: center;
+
+    .categoryMainDiv {
+        display: flex;
+    
+        button {
+            margin: 0.5rem;
+            font-weight: 200;
+   
+        }
+    }
+}
+
+.productSection {
+    background-color: $secondaryColorLight;
+    color: $secondaryColorDark;
+
+    .mainDivContentDiv {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        }
+
+    .productDiv {
+        border: 1px solid $primaryColorDark;
+        padding: 2rem;
+        margin: 1rem;
+
+        button {
+            margin-top: 1rem;
+            width: 150px;
+            padding: 0.5rem 0;  
+            
+            &:hover {
+                outline: 4px solid $secondaryColorDark;
+                background-color: whitesmoke;
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 768px) {
