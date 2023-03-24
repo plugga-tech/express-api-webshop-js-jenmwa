@@ -41,6 +41,10 @@ nav {
             }
             .material-symbols-outlined {
                 font-size: 2rem;
+
+                &:hover {
+                color: black;
+                }
             }
 
         }
@@ -72,8 +76,15 @@ button {
           position: absolute;
           margin-left: 0.5rem;
           width: 300px;
-          left: 100px;
+          left: 110px;
         }
+    }
+
+    button {
+        width: 150px;
+    }
+    .goToBtn {
+        margin-left: 1rem;
     }
 }
 
@@ -99,4 +110,8 @@ button {
         width: 100%;
     }
     
+}
+
+.logoutBtn {
+    margin-left: 0;
 }

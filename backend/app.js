@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const cors = require('cors')
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI + 'jenny-waller', {
 })
 .catch(err => console.log('err',err));
 
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
