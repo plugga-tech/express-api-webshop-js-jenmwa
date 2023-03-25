@@ -486,13 +486,22 @@ function addProductToCart(productId) {
     .then((respons) => respons.json())
     .then((data) => {
       console.log(data);
-      const findProduct = cart.find(item =>  item._id === data._id);
+      let findProduct = null;
+      for(let i=0; i<cart.length; i++) {
+        if(cart[i]._id === data._id) {
+          findProduct = cart[i];
+          break;
+        }
+      }
+      // const findProduct = cart.find(item =>  item._id === data._id);
         if(findProduct) {
           findProduct.quantity ++;
         }
         else {
-          const updatedCart = [...cart, {...data, quantity: 1}];
-          cart = updatedCart;
+          const newItem = {...data, quantity: 1};
+          cart.push(newItem);
+          // const updatedCart = [...cart, {...data, quantity: 1}];
+          // cart = updatedCart;
         }
         // cart.push(data);
         console.log(cart);
