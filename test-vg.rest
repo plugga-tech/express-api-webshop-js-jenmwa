@@ -51,7 +51,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/641c78727002016c0c3c79d3
+GET http://localhost:3000/api/products/
 
 ###
 
@@ -60,8 +60,8 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 7",
-  "description": "Beskrivning av produkt 7",
+  "name": "Produkt 8",
+  "description": "Beskrivning av produkt 8",
   "price": 200,
   "lager": 100,
   "category": "641a29165a7a4aecee1a38b8",
@@ -71,8 +71,7 @@ Content-Type: application/json
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/641a29165a7a4aecee1a38b8
-###
+GET http://localhost:3000/api/products/category/641f5e8eb07289963c5fd79a
 
 //
 // API ENDPOINTS KATEGORI

@@ -76,12 +76,14 @@ router.post("/add", async (request, response, next) => {
 router.get("/category/:id", async (request, response, next) => {
   try {
     const categoryId = request.params.id;
-    console.log(categoryId)
-    const categoryProducts = await productsModels.findOne({ category: categoryId });
+    console.log(categoryId);
+    
+    const categoryProducts = await productsModels.find({ category: categoryId });
 
-    if (categoryProducts.length === 0) {
-      return response.status(404).json({ message: "categoryProducts not found" });
-    }
+    //fungerar fint i backend men från inte med front! 
+    // if (categoryProducts.length === 0) {
+    //   response.status(404).json({ error: "Category not found" });
+    // }
     response.status(200).json(categoryProducts);
   }
   catch (error) {

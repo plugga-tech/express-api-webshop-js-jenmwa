@@ -134,6 +134,7 @@ button {
     
         button {
             margin: 0.5rem;
+            width: 100px;
             font-weight: 200;
    
         }
@@ -143,6 +144,10 @@ button {
 .productSection {
     background-color: $secondaryColorLight;
     color: $secondaryColorDark;
+
+    p {
+        margin-left: 2rem;
+    }
 
     .mainDivContentDiv {
         display: flex;

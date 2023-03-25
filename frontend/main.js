@@ -6,6 +6,7 @@ const userFormDiv = document.querySelector("#userFormDiv");
 const logInSignIn = document.querySelector("#logInSignIn");
 const quoteDiv = document.querySelector("#quoteDiv");
 const shopCartBtn = document.querySelector("#shopCartBtn");
+const productSection = document.querySelector("#productSection");
 
 const inputForm = document.createElement("div");
 const userNameInput = document.createElement("input");
@@ -383,17 +384,27 @@ function showCategory() {
     .then((data) => {
       console.log(data);
       renderCategoryHtml(data);
-    });
-  // .catch((error) => {
-  //   console.error(error);
+    })
+  .catch((error) => {
+    console.error(error);
   //   handleProductError(error.message);
-  // });
+  });
 }
 
 function renderCategoryHtml(data) {
   const categorySection = document.querySelector("#categorySection");
   const categoryMainDiv = document.createElement("div");
   categoryMainDiv.setAttribute("class", "categoryMainDiv");
+
+  const allProductsBtnDiv = document.createElement('div');
+  const showAllProductsBtn = document.createElement('button');
+  showAllProductsBtn.innerText = "All Products";
+  showAllProductsBtn.addEventListener('click', () => {
+    console.log('SHOW ALL PRODUCTS');
+  })
+  allProductsBtnDiv.appendChild(showAllProductsBtn);
+  categoryMainDiv.appendChild(allProductsBtnDiv);
+
 
   for (let i = 0; i < data.length; i++) {
     const categoryDiv = document.createElement("div");
@@ -404,8 +415,7 @@ function renderCategoryHtml(data) {
     const showCategoryProductsBtn = categoryDiv.querySelector("button");
     showCategoryProductsBtn.addEventListener("click", (e) => {
       console.log(e.target);
-      const categoryId = e.target.id;
-      showCategoryProducts(categoryId);
+      showCategoryProducts( e.target.id);
     });
 
     categoryMainDiv.appendChild(categoryDiv);
@@ -417,7 +427,7 @@ function renderCategoryHtml(data) {
 showCategory();
 
 /*******************************************************************
- ***************** RENDER CATEGORIES PRODUCTS **********************
+ ***************** RENDER CATEGORY PRODUCTS **********************
  *******************************************************************/
 
  function showCategoryProducts(categoryId) {
@@ -425,38 +435,13 @@ showCategory();
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
-      // renderProductPerCategory()
+      renderProductsHtml(data)
     })
+    .catch((error) => {
+      console.error(error);
+    });  
  }
 
-//  function renderProductPerCategory() {
-//   const productSection = document.querySelector("#productSection");
-//   productSection.innerHTML = "";
-
-//   const mainDivContent = document.createElement("div");
-//   mainDivContent.setAttribute("class", "mainDivContentDiv");
-
-//   for (let i = 0; i < data.length; i++) {
-//     const productDiv = document.createElement("div");
-//     productDiv.setAttribute("class", "productDiv");
-//     productDiv.innerHTML = `
-//        <img src="public/img_placeholder.png" width="300"><br>
-//        ${data[i].name}<br>
-//        Price: ${data[i].price} sek<br>
-//        Lager:  ${data[i].lager} in stock<br>
-//        <button id="${data[i]._id}" ${
-//       data[i].lager === 0 ? "disabled" : ""
-//     }>BUY NOW</button
-//      `;
-//     const buyButton = productDiv.querySelector("button");
-//     buyButton.addEventListener("click", function (e) {
-//       console.log(e.target);
-//       addProductToCart(e.target.id);
-//     });
-//     mainDivContent.appendChild(productDiv);
-//   }
-//   productSection.appendChild(mainDivContent);
-// }
 
 
 /*******************************************************************
@@ -477,8 +462,12 @@ function showProducts() {
 }
 
 function renderProductsHtml(data) {
-  const productSection = document.querySelector("#productSection");
   productSection.innerHTML = "";
+
+  if (data.length === 0) {
+    productSection.innerHTML = "<p>No products found.</p>";
+    return;
+  }
 
   const mainDivContent = document.createElement("div");
   mainDivContent.setAttribute("class", "mainDivContentDiv");
@@ -548,8 +537,8 @@ function addProductToCart(productId) {
       if (findProduct) {
         findProduct.quantity++;
       } else {
-        const newItem = { ...data, quantity: 1 };
-        cart.push(newItem);
+        const updatedCart = { ...data, quantity: 1 };
+        cart.push(updatedCart);
         // const updatedCart = [...cart, {...data, quantity: 1}];
         // cart = updatedCart;
       }
