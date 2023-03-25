@@ -442,8 +442,6 @@ showCategory();
     });  
  }
 
-
-
 /*******************************************************************
  ****************** RENDER ALL PRODUCTS ****************************
  *******************************************************************/
@@ -577,6 +575,21 @@ function renderShopCart() {
       <button id="orderBtn">order</button><br>
       <p id="errorMsg" class="errorMsg"></p>
     `;
+
+    const orderBtn = totalAmountContainer.querySelector("#orderBtn");
+    const errorMsg = totalAmountContainer.querySelector("#errorMsg");
+
+    if (localStorage.getItem("userName")) {
+      orderBtn.disabled = false;
+    } else {
+      orderBtn.disabled = true;
+      errorMsg.innerText = "you have to be logged in to make an order.";
+    }
+
+    orderBtn.addEventListener("click", () => {
+      console.log("click to order!");
+      sendOrder();
+    });
   } else {
     cartDiv.innerHTML = "";
     shoppingCartDiv.style.padding = 0;
@@ -590,20 +603,6 @@ function renderShopCart() {
 
   cartDiv.appendChild(shoppingCartDiv);
   shoppingCartDiv.appendChild(totalAmountContainer);
-
-  const orderBtn = document.querySelector("#orderBtn");
-  const errorMsg = document.querySelector("#errorMsg");
-
-  if (localStorage.getItem("userName")) {
-    orderBtn.disabled = false;
-  } else {
-    orderBtn.disabled = true;
-    errorMsg.innerText = "you have to be logged in to make an order.";
-  }
-
-  orderBtn.addEventListener("click", () => {
-    console.log("click to order!");
-  });
 }
 
 let shopCartVisible = false;
@@ -613,5 +612,19 @@ shopCartBtn.addEventListener("click", () => {
   shopCartVisible = !shopCartVisible;
   renderShopCart();
 });
+
+/*******************************************************************
+ ******************** RENDER SHOPCART ******************************
+ *******************************************************************/
+
+function sendOrder() {
+console.log('function sendOrder')
+const cart = JSON.parse(localStorage.getItem('shopCart'));
+console.log(cart);
+
+//array products
+//user
+}
+
 
 showProducts();
