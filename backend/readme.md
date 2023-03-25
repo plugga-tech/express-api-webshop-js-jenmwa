@@ -52,11 +52,11 @@ Frontend klienten skall kunna (VG krav):
 Skapa en ny användare samt logga in ✅
 Lösenordet skall krypteras ✅
 Se vilka produkter som finns i butiken, fördelat på olika kategorier. 
-På varje produkt så skall grundläggande info som pris, namn och bild (placeholder) visas.
-Kunna lägga en produkt i en kundvagn
+På varje produkt så skall grundläggande info som pris, namn och bild (placeholder) visas. ✅
+Kunna lägga en produkt i en kundvagn ✅
 Skicka en order med alla produkter från kundvagnen
 Kunna se en sida med alla sina skapade orders, samt vilka produkter en order innehåller.
-Inloggning samt kundvagn skall sparas i localStorage
+Inloggning samt kundvagn skall sparas i localStorage ✅
 
 Lämna in länken till ert skapde repo när ni är färidga. Skriv även ett meddelande om ni önskar att bli testade mot G eller VG kraven.
 

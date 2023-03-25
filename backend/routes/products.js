@@ -77,7 +77,7 @@ router.get("/category/:id", async (request, response, next) => {
   try {
     const categoryId = request.params.id;
     console.log(categoryId)
-    const categoryProducts = await productsModels.find({ category: categoryId });
+    const categoryProducts = await productsModels.findOne({ category: categoryId });
 
     if (categoryProducts.length === 0) {
       return response.status(404).json({ message: "categoryProducts not found" });
@@ -92,3 +92,4 @@ router.get("/category/:id", async (request, response, next) => {
 
 
 module.exports = router;
+

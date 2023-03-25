@@ -374,7 +374,7 @@ function signUpOk(newUser) {
 }
 
 /*******************************************************************
- ******************** RENDER CATEGORIES ****************************
+ ******************* RENDER CATEGORIES BTNS ************************
  *******************************************************************/
 
 function showCategory() {
@@ -404,15 +404,63 @@ function renderCategoryHtml(data) {
     const showCategoryProductsBtn = categoryDiv.querySelector("button");
     showCategoryProductsBtn.addEventListener("click", (e) => {
       console.log(e.target);
+      const categoryId = e.target.id;
+      showCategoryProducts(categoryId);
     });
+
     categoryMainDiv.appendChild(categoryDiv);
   }
+
   categorySection.appendChild(categoryMainDiv);
 }
+
 showCategory();
 
 /*******************************************************************
- ******************** RENDER PRODUCTS ******************************
+ ***************** RENDER CATEGORIES PRODUCTS **********************
+ *******************************************************************/
+
+ function showCategoryProducts(categoryId) {
+  fetch("http://localhost:3000/api/products/category/" + categoryId)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      // renderProductPerCategory()
+    })
+ }
+
+//  function renderProductPerCategory() {
+//   const productSection = document.querySelector("#productSection");
+//   productSection.innerHTML = "";
+
+//   const mainDivContent = document.createElement("div");
+//   mainDivContent.setAttribute("class", "mainDivContentDiv");
+
+//   for (let i = 0; i < data.length; i++) {
+//     const productDiv = document.createElement("div");
+//     productDiv.setAttribute("class", "productDiv");
+//     productDiv.innerHTML = `
+//        <img src="public/img_placeholder.png" width="300"><br>
+//        ${data[i].name}<br>
+//        Price: ${data[i].price} sek<br>
+//        Lager:  ${data[i].lager} in stock<br>
+//        <button id="${data[i]._id}" ${
+//       data[i].lager === 0 ? "disabled" : ""
+//     }>BUY NOW</button
+//      `;
+//     const buyButton = productDiv.querySelector("button");
+//     buyButton.addEventListener("click", function (e) {
+//       console.log(e.target);
+//       addProductToCart(e.target.id);
+//     });
+//     mainDivContent.appendChild(productDiv);
+//   }
+//   productSection.appendChild(mainDivContent);
+// }
+
+
+/*******************************************************************
+ ****************** RENDER ALL PRODUCTS ****************************
  *******************************************************************/
 
 function showProducts() {
