@@ -1,17 +1,17 @@
 console.log("script is connected!");
 
-let cart = JSON.parse(localStorage.getItem('shopCart')) || [];
+let cart = JSON.parse(localStorage.getItem("shopCart")) || [];
 
 const userFormDiv = document.querySelector("#userFormDiv");
 const logInSignIn = document.querySelector("#logInSignIn");
 const quoteDiv = document.querySelector("#quoteDiv");
+const shopCartBtn = document.querySelector("#shopCartBtn");
 
 const inputForm = document.createElement("div");
 const userNameInput = document.createElement("input");
 const userEmailInput = document.createElement("input");
 const userPasswordInput = document.createElement("input");
 const userInlogBtn = document.createElement("button");
-const shopCartBtn = document.querySelector("#shopCartBtn");
 const goToSignUpBtn = document.createElement("button");
 const textDisclaimer = document.createElement("p");
 
@@ -134,9 +134,10 @@ function renderInputField() {
           quoteDiv.innerHTML = `Welcome ${data.email}`;
           localStorage.setItem("userName", loginUser.email);
           logInSignIn.innerHTML = "person";
-          inputForm.innerHTML = "";
+          userEmailInput.value = "";
+          userPasswordInput.value = "";
           logoutSection();
-          // renderLoggedInDiv(loginUser);
+          renderShopCart();
         } else {
           console.log("login failed.");
         }
@@ -210,9 +211,11 @@ function logoutHandler() {
   localStorage.removeItem("userName");
   userFormDiv.innerHTML = "";
   userNameInput.value = "";
+  userEmailInput.value = "";
   userPasswordInput.value = "";
   quoteDiv.innerHTML = "";
   quoteDiv.innerHTML = '"Beauty is in the eye of the beholder."';
+  renderShopCart();
   handleLogin();
 }
 
@@ -398,10 +401,10 @@ function renderCategoryHtml(data) {
       <button id="${data[i]._id}">${data[i].name}</button>
     `;
 
-    const showCategoryProductsBtn = categoryDiv.querySelector('button');
-    showCategoryProductsBtn.addEventListener('click', (e) => {
-      console.log(e.target)
-    })
+    const showCategoryProductsBtn = categoryDiv.querySelector("button");
+    showCategoryProductsBtn.addEventListener("click", (e) => {
+      console.log(e.target);
+    });
     categoryMainDiv.appendChild(categoryDiv);
   }
   categorySection.appendChild(categoryMainDiv);
@@ -487,59 +490,85 @@ function addProductToCart(productId) {
     .then((data) => {
       console.log(data);
       let findProduct = null;
-      for(let i=0; i<cart.length; i++) {
-        if(cart[i]._id === data._id) {
+      for (let i = 0; i < cart.length; i++) {
+        if (cart[i]._id === data._id) {
           findProduct = cart[i];
           break;
         }
       }
       // const findProduct = cart.find(item =>  item._id === data._id);
-        if(findProduct) {
-          findProduct.quantity ++;
-        }
-        else {
-          const newItem = {...data, quantity: 1};
-          cart.push(newItem);
-          // const updatedCart = [...cart, {...data, quantity: 1}];
-          // cart = updatedCart;
-        }
-        // cart.push(data);
-        console.log(cart);
-        localStorage.setItem('shopCart', JSON.stringify(cart));
-      });
+      if (findProduct) {
+        findProduct.quantity++;
+      } else {
+        const newItem = { ...data, quantity: 1 };
+        cart.push(newItem);
+        // const updatedCart = [...cart, {...data, quantity: 1}];
+        // cart = updatedCart;
+      }
+      // cart.push(data);
+      console.log(cart);
+      localStorage.setItem("shopCart", JSON.stringify(cart));
+    });
   renderShopCart();
 }
 
 function renderShopCart() {
-
-  userFormDiv.innerHTML = "";
-
+  const cartDiv = document.querySelector("#cartDiv");
+  cartDiv.innerHTML = "";
   const shoppingCartDiv = document.createElement("div");
   shoppingCartDiv.setAttribute("class", "shopCartDiv");
+  const totalAmountContainer = document.createElement("div");
+  totalAmountContainer.setAttribute("class", "totalAmountContainer");
 
-  // if (shopCartVisible) {
+  if (shopCartVisible) {
     // shoppingCartDiv.innerHTML = "varukorgen är tom";
 
     for (let i = 0; i < cart.length; i++) {
-      shoppingCartDiv.innerHTML = `
-      ${cart[i].name}
+      shoppingCartDiv.innerHTML += `
+      <div class="shopCartItem">
+      <p>${cart[i].name}</p>
+      <p>${cart[i].quantity} st</p>
+      <p>${cart[i].price} sek </p>
+      <p>${cart[i].price * cart[i].quantity} sek</p>
+      </div>
       `;
     }
 
-  // } else {
-  //   userFormDiv.innerHTML = "";
-  // }
-  // // for (let i = 0; i < data.length; i++) {
-  //   const cartDiv = document.createElement('div');
-  //   cartDiv.setAttribute('class', 'productDiv');
-  //   cartDiv.innerHTML = `
-  //   Varukorgen är tom
-  //   `
-  //   shoppingCartDiv.appendChild(cartDiv);
-  // // }
+    const total = calculateCartTotal(cart);
+    totalAmountContainer.innerHTML = `
+      totalsum: ${total} sek<br>
+      <button id="orderBtn">order</button><br>
+      <p id="errorMsg" class="errorMsg"></p>
+    `;
+  } else {
+    cartDiv.innerHTML = "";
+    shoppingCartDiv.style.padding = 0;
+  }
 
-  userFormDiv.appendChild(shoppingCartDiv);
+  function calculateCartTotal(cart) {
+    return cart.reduce((total, item) => {
+      return total + item.quantity * item.price;
+    }, 0);
+  }
+
+  cartDiv.appendChild(shoppingCartDiv);
+  shoppingCartDiv.appendChild(totalAmountContainer);
+
+  const orderBtn = document.querySelector("#orderBtn");
+  const errorMsg = document.querySelector("#errorMsg");
+
+  if (localStorage.getItem("userName")) {
+    orderBtn.disabled = false;
+  } else {
+    orderBtn.disabled = true;
+    errorMsg.innerText = "you have to be logged in to make an order.";
+  }
+
+  orderBtn.addEventListener("click", () => {
+    console.log("click to order!");
+  });
 }
+
 let shopCartVisible = false;
 
 shopCartBtn.addEventListener("click", () => {

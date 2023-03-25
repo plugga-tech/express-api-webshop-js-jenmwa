@@ -173,11 +173,40 @@ button {
     }
 }
 
-.shopCartDiv {
-    padding-right: 2rem;
+
+.cartDiv {
     text-align: right;
     background-color: $secondaryColorDark;
     color: $primaryColorLight;
+    margin-top: 1rem;
+   
+    .shopCartDiv {
+        margin: 1rem 2rem 0 0;
+        padding: 1rem 0 1rem 0;
+
+        p {
+            display: inline;
+            margin-right: 1rem;
+        }
+        p:last-of-type{
+            margin-right: 0;
+        }
+        
+    .totalAmountContainer {
+        font-weight: bold;
+        color: $secondaryColorLight;
+        margin: 1rem 0;
+
+        button {
+            width: 150px;
+            
+        }
+        .errorMsg {
+            font-size: 0.75rem;
+            
+        }
+    }
+}
 }
 
 @media screen and (min-width: 768px) {
