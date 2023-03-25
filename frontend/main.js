@@ -1,5 +1,7 @@
 console.log("script is connected!");
 
+let cart = JSON.parse(localStorage.getItem('shopCart')) || [];
+
 const userFormDiv = document.querySelector("#userFormDiv");
 const logInSignIn = document.querySelector("#logInSignIn");
 const quoteDiv = document.querySelector("#quoteDiv");
@@ -52,7 +54,7 @@ logInSignIn.addEventListener("click", handleLogin);
 function renderInputField() {
   if (inputFormVisible) {
     logInSignIn.innerHTML = "CLOSE";
-    inputForm.style.display = "block";
+
     inputForm.innerHTML = "";
 
     const userEmailLabel = document.createElement("label");
@@ -97,7 +99,7 @@ function renderInputField() {
     userPasswordInput.addEventListener("input", checkInput);
   } else {
     logInSignIn.innerHTML = "person";
-    inputForm.style.display = "none";
+    userFormDiv.innerHTML = "";
   }
 
   goToSignUpBtn.addEventListener("click", signUpSection);
@@ -174,7 +176,6 @@ function handleLoginError(errorMessage) {
 function logoutSection() {
   if (inputFormVisible) {
     logInSignIn.innerHTML = "CLOSE";
-    inputForm.style.display = "block";
     inputForm.innerHTML = "";
 
     const userThings = document.createElement("p");
@@ -200,7 +201,7 @@ function logoutSection() {
     logOutBtn.addEventListener("click", logoutHandler);
   } else {
     logInSignIn.innerHTML = "person";
-    inputForm.style.display = "none";
+    userFormDiv.innerHTML = "";
   }
 }
 
@@ -220,9 +221,8 @@ function logoutHandler() {
  *******************************************************************/
 
 function signUpSection() {
-  console.log("go to signup");
+  console.log("at signup");
 
-  inputForm.style.display = "block";
   inputForm.innerHTML = "";
 
   const userNameLabel = document.createElement("label");
@@ -395,8 +395,13 @@ function renderCategoryHtml(data) {
   for (let i = 0; i < data.length; i++) {
     const categoryDiv = document.createElement("div");
     categoryDiv.innerHTML = `
-      <button>${data[i].name}</button>
+      <button id="${data[i]._id}">${data[i].name}</button>
     `;
+
+    const showCategoryProductsBtn = categoryDiv.querySelector('button');
+    showCategoryProductsBtn.addEventListener('click', (e) => {
+      console.log(e.target)
+    })
     categoryMainDiv.appendChild(categoryDiv);
   }
   categorySection.appendChild(categoryMainDiv);
@@ -435,7 +440,9 @@ function renderProductsHtml(data) {
        ${data[i].name}<br>
        Price: ${data[i].price} sek<br>
        Lager:  ${data[i].lager} in stock<br>
-       <button id="${data[i]._id}">BUY NOW</button
+       <button id="${data[i]._id}" ${
+      data[i].lager === 0 ? "disabled" : ""
+    }>BUY NOW</button
      `;
     const buyButton = productDiv.querySelector("button");
     buyButton.addEventListener("click", function (e) {
@@ -474,14 +481,45 @@ function handleProductError(errormessage) {
  *******************************************************************/
 
 /* <div id="userFormDiv"></div>  */
-function shoppingCart() {
-  userFormDiv.style.display = "block";
+function addProductToCart(productId) {
+  fetch("http://localhost:3000/api/products/" + productId)
+    .then((respons) => respons.json())
+    .then((data) => {
+      console.log(data);
+      const findProduct = cart.find(item =>  item._id === data._id);
+        if(findProduct) {
+          findProduct.quantity ++;
+        }
+        else {
+          const updatedCart = [...cart, {...data, quantity: 1}];
+          cart = updatedCart;
+        }
+        // cart.push(data);
+        console.log(cart);
+        localStorage.setItem('shopCart', JSON.stringify(cart));
+      });
+  renderShopCart();
+}
+
+function renderShopCart() {
+
   userFormDiv.innerHTML = "";
 
   const shoppingCartDiv = document.createElement("div");
-  shoppingCartDiv.setAttribute("class", "signUpSuccessfullDiv");
-  shoppingCartDiv.innerHTML = "varukorgen är tom";
+  shoppingCartDiv.setAttribute("class", "shopCartDiv");
 
+  // if (shopCartVisible) {
+    // shoppingCartDiv.innerHTML = "varukorgen är tom";
+
+    for (let i = 0; i < cart.length; i++) {
+      shoppingCartDiv.innerHTML = `
+      ${cart[i].name}
+      `;
+    }
+
+  // } else {
+  //   userFormDiv.innerHTML = "";
+  // }
   // // for (let i = 0; i < data.length; i++) {
   //   const cartDiv = document.createElement('div');
   //   cartDiv.setAttribute('class', 'productDiv');
@@ -493,10 +531,12 @@ function shoppingCart() {
 
   userFormDiv.appendChild(shoppingCartDiv);
 }
+let shopCartVisible = false;
 
 shopCartBtn.addEventListener("click", () => {
   console.log("click shopCart");
-  shoppingCart();
+  shopCartVisible = !shopCartVisible;
+  renderShopCart();
 });
 
 showProducts();

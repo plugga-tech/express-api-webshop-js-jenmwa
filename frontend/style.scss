@@ -164,8 +164,20 @@ button {
                 outline: 4px solid $secondaryColorDark;
                 background-color: whitesmoke;
             }
+
+            &:disabled {
+                outline: none;
+                background-color: transparent;
+            }
         }
     }
+}
+
+.shopCartDiv {
+    padding-right: 2rem;
+    text-align: right;
+    background-color: $secondaryColorDark;
+    color: $primaryColorLight;
 }
 
 @media screen and (min-width: 768px) {

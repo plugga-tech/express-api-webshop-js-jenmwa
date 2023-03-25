@@ -22,7 +22,9 @@ router.get("/:id", async (request, response, next) => {
   try {
     const id = request.params.id;
     console.log(id);
+    // const product = await productsModels.findById(id);
     const product = await productsModels.findOne({ _id: id });
+    // const product = await productsModels.findById({'_id': new ObjectId(id)})
 
     if (!product) {
       return response.status(404).json({ message: "Product not found" });
