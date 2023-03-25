@@ -58,6 +58,7 @@ button {
     padding: 0.5rem 0;
     background-color: whitesmoke;
     font-weight: bold;
+    margin-top: 0.5rem;
 
     &:hover {
         background-color: $secondaryColorLight;
@@ -72,11 +73,12 @@ button {
 
 .inputForm {
     background-color:$baseColor;
+    height: 250px;
     padding: 1rem 2rem;
 
     label {
         display: block;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     
         input {
           position: absolute;
@@ -88,10 +90,10 @@ button {
 
     button {
         width: 150px;
+        display: block;
+
     }
-    .goToBtn {
-        margin-left: 1rem;
-    }
+
 }
 
 .quoteDiv {

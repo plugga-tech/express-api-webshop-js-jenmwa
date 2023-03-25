@@ -9,7 +9,7 @@ const userNameInput = document.createElement("input");
 const userEmailInput = document.createElement("input");
 const userPasswordInput = document.createElement("input");
 const userInlogBtn = document.createElement("button");
-const shopCartBtn = document.querySelector('#shopCartBtn');
+const shopCartBtn = document.querySelector("#shopCartBtn");
 const goToSignUpBtn = document.createElement("button");
 const textDisclaimer = document.createElement("p");
 
@@ -46,7 +46,7 @@ function handleLogin() {
 logInSignIn.addEventListener("click", handleLogin);
 
 /*******************************************************************
- ******************** LOG IN SECTION ****************************** 
+ ******************** LOG IN SECTION ******************************
  *******************************************************************/
 
 function renderInputField() {
@@ -102,9 +102,8 @@ function renderInputField() {
 
   goToSignUpBtn.addEventListener("click", signUpSection);
 
+  userInlogBtn.addEventListener("click", userLogin);
 
-  userInlogBtn.addEventListener("click", userLogin)
-  
   function userLogin() {
     console.log("logga in");
     let loginUser = {
@@ -120,12 +119,12 @@ function renderInputField() {
       },
       body: JSON.stringify(loginUser),
     })
-    .then((respons) => {
-      if (!respons.ok) {
-        throw new Error(respons.statusText);
-      }
-      return respons.json();
-    })
+      .then((respons) => {
+        if (!respons.ok) {
+          throw new Error(respons.statusText);
+        }
+        return respons.json();
+      })
       .then((data) => {
         console.log(data);
         if (data.email) {
@@ -139,17 +138,17 @@ function renderInputField() {
         } else {
           console.log("login failed.");
         }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.error(error);
         handleLoginError(error.message);
       });
-  };
+  }
 }
 
-
 function handleLoginError(errorMessage) {
-  const errorDiv = document.createElement('div');
-  errorDiv.setAttribute('class', 'loginErrorDiv');
+  const errorDiv = document.createElement("div");
+  errorDiv.setAttribute("class", "loginErrorDiv");
 
   let errorDivContent = `
     <h2>Error!</h2>
@@ -159,17 +158,17 @@ function handleLoginError(errorMessage) {
   `;
   errorDiv.innerHTML = errorDivContent;
 
-  inputForm.innerHTML = '';
+  inputForm.innerHTML = "";
   inputForm.appendChild(errorDiv);
 
-  const backToLoginBtn = document.querySelector('#logInBtn');
-  backToLoginBtn.addEventListener('click', () => {
-    console.log('go back to log in');
+  const backToLoginBtn = document.querySelector("#logInBtn");
+  backToLoginBtn.addEventListener("click", () => {
+    console.log("go back to log in");
     renderInputField();
-  })
+  });
 }
 /*******************************************************************
- ******************** LOG OUT SECTION ****************************** 
+ ******************** LOG OUT SECTION ******************************
  *******************************************************************/
 
 function logoutSection() {
@@ -217,7 +216,7 @@ function logoutHandler() {
 }
 
 /*******************************************************************
- ******************** SIGN UP SECTION ****************************** 
+ ******************** SIGN UP SECTION ******************************
  *******************************************************************/
 
 function signUpSection() {
@@ -239,7 +238,7 @@ function signUpSection() {
   userCreateBtn.setAttribute("class", "logged-out");
   userCreateBtn.disabled = true;
 
-  const gotoLogInBtn = document.createElement('button')
+  const gotoLogInBtn = document.createElement("button");
 
   gotoLogInBtn.setAttribute("id", "gotoLogInBtn");
   gotoLogInBtn.setAttribute("class", "goToBtn");
@@ -277,23 +276,22 @@ function signUpSection() {
   userPasswordInput.addEventListener("input", checkInput);
   userEmailInput.addEventListener("input", checkInput);
 
-  userCreateBtn.addEventListener("click" ,createUser);
+  userCreateBtn.addEventListener("click", createUser);
 
-  gotoLogInBtn.addEventListener('click', renderInputField);
-  
+  gotoLogInBtn.addEventListener("click", renderInputField);
 }
 
 /*******************************************************************
- ****************** CREATEUSER SECTION **************************** 
+ ****************** CREATEUSER SECTION ****************************
  *******************************************************************/
 
- function createUser() {
+function createUser() {
   console.log("create");
 
   let newUser = {
     name: userNameInput.value,
     email: userEmailInput.value,
-    password: userPasswordInput.value
+    password: userPasswordInput.value,
   };
 
   console.log(newUser);
@@ -313,7 +311,7 @@ function signUpSection() {
     })
     .then((data) => {
       console.log(data);
-       signUpOk(newUser);
+      signUpOk(newUser);
     })
     .catch((error) => {
       console.error(error);
@@ -323,11 +321,11 @@ function signUpSection() {
   userNameInput.value = "";
   userPasswordInput.value = "";
   userEmailInput.value = "";
-} 
+}
 
 function handleSignUpError(errorMessage) {
-  const errorDiv = document.createElement('div');
-  errorDiv.setAttribute('class', 'signUpErrorDiv');
+  const errorDiv = document.createElement("div");
+  errorDiv.setAttribute("class", "signUpErrorDiv");
 
   let errorDivContent = `
     <h2>Error!</h2>
@@ -337,14 +335,14 @@ function handleSignUpError(errorMessage) {
   `;
   errorDiv.innerHTML = errorDivContent;
 
-  inputForm.innerHTML = '';
+  inputForm.innerHTML = "";
   inputForm.appendChild(errorDiv);
 
-  const backToSignUpBtn = document.querySelector('#backToSignUpBtn');
-  backToSignUpBtn.addEventListener('click', () => {
-    console.log('go back to sign up');
+  const backToSignUpBtn = document.querySelector("#backToSignUpBtn");
+  backToSignUpBtn.addEventListener("click", () => {
+    console.log("go back to sign up");
     signUpSection();
-  })
+  });
 }
 
 function signUpOk(newUser) {
@@ -352,51 +350,50 @@ function signUpOk(newUser) {
   inputForm.style.display = "block";
   inputForm.innerHTML = "";
 
-  const mainDiv = document.createElement('div');
-  mainDiv.setAttribute('class', 'signUpSuccessfullDiv')
+  const mainDiv = document.createElement("div");
+  mainDiv.setAttribute("class", "signUpSuccessfullDiv");
 
   let mainDivContent = `
   <h2>Hello ${newUser.name}!</h2>
   <p>You account was successfully created and you can now log in!</p>
   <p> Go to <button id="logInBtn" class="goToBtn"> LOG IN >> </button>
-  `
+  `;
   mainDiv.innerHTML = mainDivContent;
 
   inputForm.appendChild(mainDiv);
 
-  const logInBtn = document.querySelector('#logInBtn');
+  const logInBtn = document.querySelector("#logInBtn");
 
-  logInBtn.addEventListener('click', () => {
-    console.log('account created and go to login');
+  logInBtn.addEventListener("click", () => {
+    console.log("account created and go to login");
     renderInputField();
-  })
+  });
 }
 
 /*******************************************************************
- ******************** RENDER CATEGORIES **************************** 
+ ******************** RENDER CATEGORIES ****************************
  *******************************************************************/
- 
- function showCategory() {
-  fetch('http://localhost:3000/api/categories')
-    .then(respons => respons.json())
-    .then(data => {
-      console.log(data)
+
+function showCategory() {
+  fetch("http://localhost:3000/api/categories")
+    .then((respons) => respons.json())
+    .then((data) => {
+      console.log(data);
       renderCategoryHtml(data);
-    })
-    // .catch((error) => {
-    //   console.error(error);
-    //   handleProductError(error.message);
-    // });
- }
+    });
+  // .catch((error) => {
+  //   console.error(error);
+  //   handleProductError(error.message);
+  // });
+}
 
 function renderCategoryHtml(data) {
-  const categorySection = document.querySelector('#categorySection');
-  const categoryMainDiv = document.createElement('div');
-  categoryMainDiv.setAttribute('class', 'categoryMainDiv');
-
+  const categorySection = document.querySelector("#categorySection");
+  const categoryMainDiv = document.createElement("div");
+  categoryMainDiv.setAttribute("class", "categoryMainDiv");
 
   for (let i = 0; i < data.length; i++) {
-    const categoryDiv = document.createElement('div');
+    const categoryDiv = document.createElement("div");
     categoryDiv.innerHTML = `
       <button>${data[i].name}</button>
     `;
@@ -404,91 +401,102 @@ function renderCategoryHtml(data) {
   }
   categorySection.appendChild(categoryMainDiv);
 }
-showCategory() 
+showCategory();
 
 /*******************************************************************
- ******************** RENDER PRODUCTS ****************************** 
+ ******************** RENDER PRODUCTS ******************************
  *******************************************************************/
 
- function showProducts() {
-  fetch('http://localhost:3000/api/products')
-    .then(respons => respons.json())
-    .then(data => {
-      console.log(data)
+function showProducts() {
+  fetch("http://localhost:3000/api/products")
+    .then((respons) => respons.json())
+    .then((data) => {
+      console.log(data);
       renderProductsHtml(data);
     })
     .catch((error) => {
       console.error(error);
       handleProductError(error.message);
     });
- }
+}
 
- function renderProductsHtml(data) {
-  const productSection = document.querySelector('#productSection');
+function renderProductsHtml(data) {
+  const productSection = document.querySelector("#productSection");
   productSection.innerHTML = "";
 
-  const mainDivContent = document.createElement('div');
-  mainDivContent.setAttribute('class', 'mainDivContentDiv');
+  const mainDivContent = document.createElement("div");
+  mainDivContent.setAttribute("class", "mainDivContentDiv");
 
   for (let i = 0; i < data.length; i++) {
-    const productDiv = document.createElement('div');
-    productDiv.setAttribute('class', 'productDiv');
+    const productDiv = document.createElement("div");
+    productDiv.setAttribute("class", "productDiv");
     productDiv.innerHTML = `
-      <img src="public/img_placeholder.png" width="300"><br>
-      ${data[i].name}<br>
-      Price: ${data[i].price} sek<br>
-      Lager:  ${data[i].lager} in stock<br>
-      <button>BUY NOW</button
-    `
-    const buyButton = productDiv.querySelector('button');
-    buyButton.addEventListener('click', function() {
-      console.log(`You clicked the "BUY NOW" button for product ${data[i].name}`);
+       <img src="public/img_placeholder.png" width="300"><br>
+       ${data[i].name}<br>
+       Price: ${data[i].price} sek<br>
+       Lager:  ${data[i].lager} in stock<br>
+       <button id="${data[i]._id}">BUY NOW</button
+     `;
+    const buyButton = productDiv.querySelector("button");
+    buyButton.addEventListener("click", function (e) {
+      console.log(e.target);
+      addProductToCart(e.target.id);
     });
-    
-  mainDivContent.appendChild(productDiv);
-}
+    mainDivContent.appendChild(productDiv);
+  }
   productSection.appendChild(mainDivContent);
- }
+}
 
- //Clickevent köp-knappar
+// map med lisa + klickevent
+// data.map( product => {
+//     let item = document.createElement('div');
+//     item.setAttribute('class', 'productDiv');
+//     item.id = product._id;
+//     item.innerText = product.name + `, ` + product.price + ' kr, ' + 'in stock: ' + product.lager;
+//     let button = document.createElement("button");
+//             button.innerText = "Köp!";
+//             button.id = product._id;
 
+//             item.appendChild(button)
+//     mainDivContent.appendChild(item)
+//   })
+//   productSection.appendChild(mainDivContent);
+// }
 
- function handleProductError(errormessage) {
-  console.log(errormessage)
- }
+//Clickevent köp-knappar
 
- /*******************************************************************
- ******************** RENDER SHOPCART ****************************** 
+function handleProductError(errormessage) {
+  console.log(errormessage);
+}
+
+/*******************************************************************
+ ******************** RENDER SHOPCART ******************************
  *******************************************************************/
-
-
 
 /* <div id="userFormDiv"></div>  */
 function shoppingCart() {
   userFormDiv.style.display = "block";
   userFormDiv.innerHTML = "";
 
-const shoppingCartDiv = document.createElement('div');
-shoppingCartDiv.setAttribute('class', 'signUpSuccessfullDiv')
-shoppingCartDiv.innerHTML = 'varukorgen är tom'
+  const shoppingCartDiv = document.createElement("div");
+  shoppingCartDiv.setAttribute("class", "signUpSuccessfullDiv");
+  shoppingCartDiv.innerHTML = "varukorgen är tom";
 
-// // for (let i = 0; i < data.length; i++) {
-//   const cartDiv = document.createElement('div');
-//   cartDiv.setAttribute('class', 'productDiv');
-//   cartDiv.innerHTML = `
-//   Varukorgen är tom
-//   `
-//   shoppingCartDiv.appendChild(cartDiv);
-// // }
+  // // for (let i = 0; i < data.length; i++) {
+  //   const cartDiv = document.createElement('div');
+  //   cartDiv.setAttribute('class', 'productDiv');
+  //   cartDiv.innerHTML = `
+  //   Varukorgen är tom
+  //   `
+  //   shoppingCartDiv.appendChild(cartDiv);
+  // // }
 
-userFormDiv.appendChild(shoppingCartDiv);
-
+  userFormDiv.appendChild(shoppingCartDiv);
 }
 
-shopCartBtn.addEventListener('click', () => {
-  console.log('click shopCart');
+shopCartBtn.addEventListener("click", () => {
+  console.log("click shopCart");
   shoppingCart();
-})
+});
 
-
- showProducts();
+showProducts();
