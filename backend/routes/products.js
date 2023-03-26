@@ -80,9 +80,9 @@ router.get("/category/:id", async (request, response, next) => {
     
     const categoryProducts = await productsModels.find({ category: categoryId });
 
-    //fungerar fint i backend men från inte med front! 
+    //fungerar som felmeddelande i backend men inte i front
     // if (categoryProducts.length === 0) {
-    //   response.status(404).json({ error: "Category not found" });
+    //   return response.status(404).json({ error: "Category not found" });
     // }
     response.status(200).json(categoryProducts);
   }

@@ -401,6 +401,7 @@ function renderCategoryHtml(data) {
   showAllProductsBtn.innerText = "All Products";
   showAllProductsBtn.addEventListener('click', () => {
     console.log('SHOW ALL PRODUCTS');
+    showProducts();
   })
   allProductsBtnDiv.appendChild(showAllProductsBtn);
   categoryMainDiv.appendChild(allProductsBtnDiv);
@@ -439,6 +440,7 @@ showCategory();
     })
     .catch((error) => {
       console.error(error);
+      
     });  
  }
 
@@ -482,6 +484,8 @@ function renderProductsHtml(data) {
       data[i].lager === 0 ? "disabled" : ""
     }>BUY NOW</button
      `;
+    
+     //Clickevent köp-knappar
     const buyButton = productDiv.querySelector("button");
     buyButton.addEventListener("click", function (e) {
       console.log(e.target);
@@ -492,23 +496,7 @@ function renderProductsHtml(data) {
   productSection.appendChild(mainDivContent);
 }
 
-// map med lisa + klickevent
-// data.map( product => {
-//     let item = document.createElement('div');
-//     item.setAttribute('class', 'productDiv');
-//     item.id = product._id;
-//     item.innerText = product.name + `, ` + product.price + ' kr, ' + 'in stock: ' + product.lager;
-//     let button = document.createElement("button");
-//             button.innerText = "Köp!";
-//             button.id = product._id;
 
-//             item.appendChild(button)
-//     mainDivContent.appendChild(item)
-//   })
-//   productSection.appendChild(mainDivContent);
-// }
-
-//Clickevent köp-knappar
 
 function handleProductError(errormessage) {
   console.log(errormessage);
@@ -524,14 +512,14 @@ function addProductToCart(productId) {
     .then((respons) => respons.json())
     .then((data) => {
       console.log(data);
-      let findProduct = null;
-      for (let i = 0; i < cart.length; i++) {
-        if (cart[i]._id === data._id) {
-          findProduct = cart[i];
-          break;
-        }
-      }
-      // const findProduct = cart.find(item =>  item._id === data._id);
+      // let findProduct = null;
+      // for (let i = 0; i < cart.length; i++) {
+      //   if (cart[i]._id === data._id) {
+      //     findProduct = cart[i];
+      //     break;
+      //   }
+      // }
+      const findProduct = cart.find(item =>  item._id === data._id);
       if (findProduct) {
         findProduct.quantity++;
       } else {
@@ -571,17 +559,27 @@ function renderShopCart() {
 
     const total = calculateCartTotal(cart);
     totalAmountContainer.innerHTML = `
-      totalsum: ${total} sek<br>
+      <p id="totalsum">totalsum: ${total} sek</p><br>
       <button id="orderBtn">order</button><br>
       <p id="errorMsg" class="errorMsg"></p>
     `;
 
     const orderBtn = totalAmountContainer.querySelector("#orderBtn");
     const errorMsg = totalAmountContainer.querySelector("#errorMsg");
+    const totalsum =  totalAmountContainer.querySelector("#totalsum");
+    
+ 
 
     if (localStorage.getItem("userName")) {
       orderBtn.disabled = false;
-    } else {
+    } 
+    if(cart.length === 0) {
+      errorMsg.innerText = "ShopCart is empty";
+      orderBtn.disabled = true;
+      totalsum.innerHTML = '';
+    }
+    
+    else {
       orderBtn.disabled = true;
       errorMsg.innerText = "you have to be logged in to make an order.";
     }

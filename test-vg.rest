@@ -60,30 +60,31 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 8",
-  "description": "Beskrivning av produkt 8",
-  "price": 200,
+  "name": "Produkt 2",
+  "description": "Beskrivning av produkt 2",
+  "price": 300,
   "lager": 100,
-  "category": "641a29165a7a4aecee1a38b8",
+  "category": "6420180426412c61b83301be",
   "token": "1234key1234"
 }
 
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/641f5e8eb07289963c5fd79a
+GET http://localhost:3000/api/products/category/642017cd26412c61b83301b8
 
 //
 // API ENDPOINTS KATEGORI
 // 
-
+###
 // SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401
 # @name createCategory
+
 POST http://localhost:3000/api/categories/add
 Content-Type: application/json
 
 {
-  "name": "Kategori 5",
+  "name": "Kategori 3",
   "token": "1234key1234"
 }
 
