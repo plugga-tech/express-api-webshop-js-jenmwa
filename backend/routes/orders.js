@@ -39,19 +39,19 @@ router.post("/add", async (request, response, next) => {
 });
 
 // HÄMTA ALLA ORDERS - BETYG G
-router.get("/all", async (request, response, next) => {
-  try {
-    const orders = await ordersModels.find().populate("products.productId");
+// router.get("/all", async (request, response, next) => {
+//   try {
+//     const orders = await ordersModels.find().populate("products.productId");
 
-    if (!orders) {
-      return response.status(404).json({ message: "No orders found" });
-    }
-    response.status(200).json(orders);
-  } catch (error) {
-    console.error(error.message);
-    response.status(500).json({ message: "Error" });
-  }
-});
+//     if (!orders) {
+//       return response.status(404).json({ message: "No orders found" });
+//     }
+//     response.status(200).json(orders);
+//   } catch (error) {
+//     console.error(error.message);
+//     response.status(500).json({ message: "Error" });
+//   }
+// });
 
 // HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS // ANNARS FAIL
 

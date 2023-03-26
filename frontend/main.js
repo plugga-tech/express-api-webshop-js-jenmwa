@@ -134,6 +134,7 @@ function renderInputField() {
           console.log(data.email);
           quoteDiv.innerHTML = `Welcome ${data.email}`;
           localStorage.setItem("userName", loginUser.email);
+          localStorage.setItem("userId", data.id);
           logInSignIn.innerHTML = "person";
           userEmailInput.value = "";
           userPasswordInput.value = "";
@@ -531,9 +532,9 @@ function addProductToCart(productId) {
       // cart.push(data);
       console.log(cart);
       localStorage.setItem("shopCart", JSON.stringify(cart));
+      renderShopCart();
     });
-  renderShopCart();
-}
+};
 
 function renderShopCart() {
   const cartDiv = document.querySelector("#cartDiv");
@@ -566,19 +567,13 @@ function renderShopCart() {
 
     const orderBtn = totalAmountContainer.querySelector("#orderBtn");
     const errorMsg = totalAmountContainer.querySelector("#errorMsg");
-    const totalsum =  totalAmountContainer.querySelector("#totalsum");
-    
- 
 
-    if (localStorage.getItem("userName")) {
+    if (cart.length === 0) {
+      orderBtn.disabled = true;
+    }
+    else if (localStorage.getItem("userName")) {
       orderBtn.disabled = false;
     } 
-    if(cart.length === 0) {
-      errorMsg.innerText = "ShopCart is empty";
-      orderBtn.disabled = true;
-      totalsum.innerHTML = '';
-    }
-    
     else {
       orderBtn.disabled = true;
       errorMsg.innerText = "you have to be logged in to make an order.";
@@ -588,9 +583,12 @@ function renderShopCart() {
       console.log("click to order!");
       sendOrder();
     });
+
   } else {
     cartDiv.innerHTML = "";
     shoppingCartDiv.style.padding = 0;
+    orderBtn.disabled = true;
+
   }
 
   function calculateCartTotal(cart) {
@@ -612,17 +610,47 @@ shopCartBtn.addEventListener("click", () => {
 });
 
 /*******************************************************************
- ******************** RENDER SHOPCART ******************************
+ *********************** SEND ORDER ********************************
  *******************************************************************/
 
 function sendOrder() {
 console.log('function sendOrder')
-const cart = JSON.parse(localStorage.getItem('shopCart'));
-console.log(cart);
+const cartOrder = JSON.parse(localStorage.getItem('shopCart'));
+const user = localStorage.getItem('userId');
+console.log(cartOrder , 'useriId: ' + user);
 
-//array products
-//user
+const products = cartOrder.map(item => ({
+  productId: item._id,
+  quantity: item.quantity
+}));
+
+let order = {
+  user: user,
+  products
+}
+console.log(order)
+
+fetch('http://localhost:3000/api/orders/add', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(order)
+})
+.then((respons) => respons.json())
+.then((data) => {
+  console.log(data);
+  orderConfirmation();
+  localStorage.removeItem("shopCart");
+})
 }
 
+function orderConfirmation() {
+  console.log('order send successfully')
+  const shoppingCartDiv = document.querySelector('.shopCartDiv');
+  shoppingCartDiv.innerHTML = 'Order successful';
+  cart = [];
+
+}
 
 showProducts();
