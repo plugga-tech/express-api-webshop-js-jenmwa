@@ -54,7 +54,6 @@ router.post("/add", async (request, response, next) => {
 // });
 
 // HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS // ANNARS FAIL
-
 router.get("/all/:token", async (request, response, next) => {
   try {
     const { token } = request.params;
@@ -72,7 +71,6 @@ router.get("/all/:token", async (request, response, next) => {
 });
 
 // HÄMTA ORDERS FÖR EN USER // SKALL MISSLYCKAS = INGEN KEY  // SVARA MED 401 //SKALL LYCKAS = KEY
-
 router.post("/user", async (request, response, next) => {
   try {
     //ta emot från post

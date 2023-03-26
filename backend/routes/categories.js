@@ -18,10 +18,7 @@ router.get("/", async (request, response, next) => {
 });
 
 
-
-
-
-// SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401
+// SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401 G
 // router.post("/add", async (request, response, next) => {
 //   try {
 //     let addCategory = await categoryModels.create(request.body);

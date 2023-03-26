@@ -20,9 +20,6 @@ const productSchema = mongoose.Schema({
   category: {
     type: [mongoose.Types.ObjectId],
     ref: 'category'
-  // },
-  // token: {
-  //   type: String
   }
 });
 

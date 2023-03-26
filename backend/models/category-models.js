@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 const categorySchema = mongoose.Schema({
     name: {
         type: String
-    // },
-    // token: {
-    //     type: String,
-        // required: true,
+   
     }
 
 })

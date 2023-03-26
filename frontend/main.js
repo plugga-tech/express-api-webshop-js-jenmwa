@@ -386,10 +386,10 @@ function showCategory() {
       console.log(data);
       renderCategoryHtml(data);
     })
-  .catch((error) => {
-    console.error(error);
-  //   handleProductError(error.message);
-  });
+    .catch((error) => {
+      console.error(error);
+      //   handleProductError(error.message);
+    });
 }
 
 function renderCategoryHtml(data) {
@@ -397,16 +397,15 @@ function renderCategoryHtml(data) {
   const categoryMainDiv = document.createElement("div");
   categoryMainDiv.setAttribute("class", "categoryMainDiv");
 
-  const allProductsBtnDiv = document.createElement('div');
-  const showAllProductsBtn = document.createElement('button');
+  const allProductsBtnDiv = document.createElement("div");
+  const showAllProductsBtn = document.createElement("button");
   showAllProductsBtn.innerText = "All Products";
-  showAllProductsBtn.addEventListener('click', () => {
-    console.log('SHOW ALL PRODUCTS');
+  showAllProductsBtn.addEventListener("click", () => {
+    console.log("SHOW ALL PRODUCTS");
     showProducts();
-  })
+  });
   allProductsBtnDiv.appendChild(showAllProductsBtn);
   categoryMainDiv.appendChild(allProductsBtnDiv);
-
 
   for (let i = 0; i < data.length; i++) {
     const categoryDiv = document.createElement("div");
@@ -417,7 +416,7 @@ function renderCategoryHtml(data) {
     const showCategoryProductsBtn = categoryDiv.querySelector("button");
     showCategoryProductsBtn.addEventListener("click", (e) => {
       console.log(e.target);
-      showCategoryProducts( e.target.id);
+      showCategoryProducts(e.target.id);
     });
 
     categoryMainDiv.appendChild(categoryDiv);
@@ -432,18 +431,17 @@ showCategory();
  ***************** RENDER CATEGORY PRODUCTS **********************
  *******************************************************************/
 
- function showCategoryProducts(categoryId) {
+function showCategoryProducts(categoryId) {
   fetch("http://localhost:3000/api/products/category/" + categoryId)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
-      renderProductsHtml(data)
+      console.log(data);
+      renderProductsHtml(data);
     })
     .catch((error) => {
       console.error(error);
-      
-    });  
- }
+    });
+}
 
 /*******************************************************************
  ****************** RENDER ALL PRODUCTS ****************************
@@ -485,8 +483,8 @@ function renderProductsHtml(data) {
       data[i].lager === 0 ? "disabled" : ""
     }>BUY NOW</button
      `;
-    
-     //Clickevent köp-knappar
+
+    //Clickevent köp-knappar
     const buyButton = productDiv.querySelector("button");
     buyButton.addEventListener("click", function (e) {
       console.log(e.target);
@@ -496,8 +494,6 @@ function renderProductsHtml(data) {
   }
   productSection.appendChild(mainDivContent);
 }
-
-
 
 function handleProductError(errormessage) {
   console.log(errormessage);
@@ -513,28 +509,18 @@ function addProductToCart(productId) {
     .then((respons) => respons.json())
     .then((data) => {
       console.log(data);
-      // let findProduct = null;
-      // for (let i = 0; i < cart.length; i++) {
-      //   if (cart[i]._id === data._id) {
-      //     findProduct = cart[i];
-      //     break;
-      //   }
-      // }
-      const findProduct = cart.find(item =>  item._id === data._id);
+      const findProduct = cart.find((item) => item._id === data._id);
       if (findProduct) {
         findProduct.quantity++;
       } else {
         const updatedCart = { ...data, quantity: 1 };
         cart.push(updatedCart);
-        // const updatedCart = [...cart, {...data, quantity: 1}];
-        // cart = updatedCart;
       }
-      // cart.push(data);
       console.log(cart);
       localStorage.setItem("shopCart", JSON.stringify(cart));
       renderShopCart();
     });
-};
+}
 
 function renderShopCart() {
   const cartDiv = document.querySelector("#cartDiv");
@@ -568,13 +554,9 @@ function renderShopCart() {
     const orderBtn = totalAmountContainer.querySelector("#orderBtn");
     const errorMsg = totalAmountContainer.querySelector("#errorMsg");
 
-    if (cart.length === 0) {
-      orderBtn.disabled = true;
-    }
-    else if (localStorage.getItem("userName")) {
+    if (localStorage.getItem("userName")) {
       orderBtn.disabled = false;
-    } 
-    else {
+    } else {
       orderBtn.disabled = true;
       errorMsg.innerText = "you have to be logged in to make an order.";
     }
@@ -583,12 +565,9 @@ function renderShopCart() {
       console.log("click to order!");
       sendOrder();
     });
-
   } else {
     cartDiv.innerHTML = "";
     shoppingCartDiv.style.padding = 0;
-    orderBtn.disabled = true;
-
   }
 
   function calculateCartTotal(cart) {
@@ -614,43 +593,42 @@ shopCartBtn.addEventListener("click", () => {
  *******************************************************************/
 
 function sendOrder() {
-console.log('function sendOrder')
-const cartOrder = JSON.parse(localStorage.getItem('shopCart'));
-const user = localStorage.getItem('userId');
-console.log(cartOrder , 'useriId: ' + user);
+  console.log("function sendOrder");
+  const cartOrder = JSON.parse(localStorage.getItem("shopCart"));
+  const user = localStorage.getItem("userId");
+  console.log(cartOrder, "useriId: " + user);
 
-const products = cartOrder.map(item => ({
-  productId: item._id,
-  quantity: item.quantity
-}));
+  const products = cartOrder.map((item) => ({
+    productId: item._id,
+    quantity: item.quantity,
+  }));
 
-let order = {
-  user: user,
-  products
-}
-console.log(order)
+  let order = {
+    user: user,
+    products,
+  };
+  console.log(order);
 
-fetch('http://localhost:3000/api/orders/add', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(order)
-})
-.then((respons) => respons.json())
-.then((data) => {
-  console.log(data);
-  orderConfirmation();
-  localStorage.removeItem("shopCart");
-})
+  fetch("http://localhost:3000/api/orders/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  })
+    .then((respons) => respons.json())
+    .then((data) => {
+      console.log(data);
+      orderConfirmation();
+      localStorage.removeItem("shopCart");
+    });
 }
 
 function orderConfirmation() {
-  console.log('order send successfully')
-  const shoppingCartDiv = document.querySelector('.shopCartDiv');
-  shoppingCartDiv.innerHTML = 'Order successful';
+  console.log("order send successfully");
+  const shoppingCartDiv = document.querySelector(".shopCartDiv");
+  shoppingCartDiv.innerHTML = "Order successful";
   cart = [];
-
 }
 
 showProducts();

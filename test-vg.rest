@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "6418e2af5cae7bce73487f01"
+  "id": "// ID PÅ EN SPECIFIK USER"
 }
 
 ###
@@ -23,9 +23,9 @@ POST http://localhost:3000/api/users/add
 Content-Type: application/json
 
 {
-  "name": "Jen Testsson",
-  "email": "jen@mail.com",
-  "password": "jen"
+  "name": "Test Testsson",
+  "email": "test@mail.com",
+  "password": "test"
 }
 
 ###
@@ -35,8 +35,8 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "jen@mail.com",
-  "password": "jenn"
+  "email": "// USER EMAIL",
+  "password": "// USER PASSWORD"
 }
 
 ###
@@ -51,7 +51,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/
+GET http://localhost:3000/api/products/ // ID PÅ EN SPECIFIK PRODUKT
 
 ###
 
@@ -60,18 +60,18 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 2",
-  "description": "Beskrivning av produkt 2",
-  "price": 300,
-  "lager": 100,
-  "category": "6420180426412c61b83301be",
+  "name": "Produkt 1",
+  "description": "Beskrivning av produkt 1",
+  "price": 100,
+  "lager": 10,
+  "category": "// ID PÅ EN SPECIFIK KATEGORI",
   "token": "1234key1234"
 }
 
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/642017cd26412c61b83301b8
+GET http://localhost:3000/api/products/category/ // ID PÅ EN SPECIFIK KATEGORI
 
 //
 // API ENDPOINTS KATEGORI
@@ -84,7 +84,7 @@ POST http://localhost:3000/api/categories/add
 Content-Type: application/json
 
 {
-  "name": "Kategori 3",
+  "name": "Kategori 1",
   "token": "1234key1234"
 }
 
@@ -100,13 +100,13 @@ GET http://localhost:3000/api/categories
 //
 
 // HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS
-GET http://localhost:3000/api/orders/all/1234key1234
+GET http://localhost:3000/api/orders/all/ // API TOKEN
 // TEST MED RÄTT TOKEN
 
 ###
 
 // HÄMTA ALLA ORDER, FEL KEY // SKALL MISSLYCKAS
-GET http://localhost:3000/api/orders/all/1234key123
+GET http://localhost:3000/api/orders/all/ // TEST MED FEL TOKEN
 // TEST MED FEL TOKEN
 ###
 
@@ -115,14 +115,14 @@ POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
-  "user": "6419e3d6d8ba48259cd3e5bf",
+  "user": " USER ID FÖR DEN SOM SKA SKAPA ORDERN",
       "products": [
     {
-      "productId": "641c78647002016c0c3c79cf",
+      "productId": "// ETT PRODUKT ID",
       "quantity": 4
     },
     {
-      "productId": "641c786c7002016c0c3c79d1",
+      "productId": "// ETT PRODUKT ID",
       "quantity": 2
     }
   ]
@@ -135,7 +135,7 @@ POST http://localhost:3000/api/orders/user
 Content-Type: application/json
 
 {
-    "user": "6418e2af5cae7bce73487f01"
+    "user": "// USER ID FÖR DEN SOM SKA VISA ORDERS"
 }
 ###
 
@@ -144,7 +144,7 @@ POST http://localhost:3000/api/orders/user
 Content-Type: application/json
 
 {
-    "user": "6419e3d6d8ba48259cd3e5bf",
+    "user": "// USER ID FÖR DEN SOM SKA VISA ORDERS",
     "token": "1234key1234"
 }
 ###
