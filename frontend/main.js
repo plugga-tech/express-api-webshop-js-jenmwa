@@ -188,10 +188,11 @@ function logoutSection() {
     logOutBtn.setAttribute("class", "logoutBtn");
 
     textDisclaimer.textContent = "YOUR ACCOUNT: ";
-    userThings.innerHTML = `
-    My Orders <br>
+    userThings.innerHTML = `<div>
+    <div id="myOrdersDiv" class="myOrdersDiv">My Orders</div>
     My Wishlist <br>
     My Settings <br><br>
+    </div>
     `;
 
     logOutBtn.textContent = "LOG OUT >> ";
@@ -206,6 +207,11 @@ function logoutSection() {
     logInSignIn.innerHTML = "person";
     userFormDiv.innerHTML = "";
   }
+
+  const myOrdersDiv = document.querySelector("#myOrdersDiv");
+  myOrdersDiv.addEventListener("click", () => {
+    console.log("click on orders");
+  });
 }
 
 function logoutHandler() {
@@ -220,6 +226,12 @@ function logoutHandler() {
   renderShopCart();
   handleLogin();
 }
+
+/*******************************************************************
+ ************************ SHOW ORDERS ******************************
+ *******************************************************************/
+
+ 
 
 /*******************************************************************
  ******************** SIGN UP SECTION ******************************
