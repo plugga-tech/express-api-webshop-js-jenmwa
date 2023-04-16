@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const cookieParser = require("cookie-parser");
+
 
 const crypto = require("crypto-js");
 const userModels = require("../models/users-models");
+
+router.use(cookieParser());
 
 // HÄMTA ALLA USERS // SKICKA INTE MED LÖSENORD // BARA ID, NAMN + EMAIL PÅ ALLA USERS
 router.get("/", async (req, res, next) => {
@@ -76,7 +80,13 @@ router.post("/login", async (request, response, next) => {
     }
 
     if (crypto.SHA3(password).toString() === findUser.password) {
-      response.status(201).json({ email: findUser.email, id: findUser._id });
+      
+      // const token = process.env.ADMIN_TOKEN;
+      // console.log('userToken', token);
+      response.cookie('userToken', '1234key1234');
+      console.log('kaka sparad')
+  
+      response.status(201).json({ email: findUser.email, id: findUser._id});
     } else {
       response.status(401).json({ error: "Invalid password" });
     }
@@ -86,4 +96,25 @@ router.post("/login", async (request, response, next) => {
   }
 });
 
+
+// försölker få till cookie MEN jag klarar det inte. dessa POST sätter en cookie med POSTMAN, men jag får itne till det i min kod.
+// router.post("/set", async (req, res, next) => {
+//   try {
+//     res.cookie('userTokenTESTtestTEST', '1234key1234')
+//     res.send('kaka sparad')
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ error: "Error" });
+//   }
+// });
+
+// router.post("/cookies", async (req, res, next) => {
+//   try {
+//     console.log(req.cookies)
+//     res.send('här är din kaka. userKey: ' + req.cookies['userTokenTESTtestTEST'])
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ error: "Error" });
+//   }
+// });
 module.exports = router;

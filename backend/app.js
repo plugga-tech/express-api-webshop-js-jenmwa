@@ -25,17 +25,36 @@ mongoose.connect(process.env.MONGODB_URI + 'jenny-waller', {
 })
 .catch(err => console.log('err',err));
 
-app.use(cors())
+app.use(cors(
+  {
+    origin: 'http://127.0.0.1:5501',
+    credentials: true
+  }
+
+));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter)
+
+app.get('/set', function(req,res) {
+  res.cookie('userId', 'HEJ')
+  res.send('kaka sparad')
+})
+
+app.get('/cookies', function(req,res) {
+  console.log(req.cookies)
+  res.send('här är din kaka. userId: ' + req.cookies['userId'])
+})
 
 module.exports = app;

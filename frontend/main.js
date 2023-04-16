@@ -140,6 +140,7 @@ function renderInputField() {
           userPasswordInput.value = "";
           logoutSection();
           renderShopCart();
+          
         } else {
           console.log("login failed.");
         }
@@ -177,28 +178,31 @@ function handleLoginError(errorMessage) {
  *******************************************************************/
 
 function logoutSection() {
+  console.log(document.cookie);
   if (inputFormVisible) {
     logInSignIn.innerHTML = "CLOSE";
     inputForm.innerHTML = "";
 
-    const userThings = document.createElement("p");
+    const userThings = document.createElement("div");
+    userThings.setAttribute('id', 'userThings')
 
     const logOutBtn = document.createElement("button");
     logOutBtn.setAttribute("id", "logOutBtn");
     logOutBtn.setAttribute("class", "logoutBtn");
 
-    textDisclaimer.textContent = "YOUR ACCOUNT: ";
-    userThings.innerHTML = `<div>
-    <div id="myOrdersDiv" class="myOrdersDiv">My Orders</div>
-    My Wishlist <br>
-    My Settings <br><br>
+    const userContainer = document.createElement('div');
+    userContainer.setAttribute('id', 'userContainer')
+
+    userContainer.textContent = "YOUR ACCOUNT: ";
+    userThings.innerHTML = `<div class="myOrdersDiv">
+    <p id="myOrdersP">My Orders</p>
     </div>
     `;
 
     logOutBtn.textContent = "LOG OUT >> ";
 
-    inputForm.appendChild(textDisclaimer);
-    textDisclaimer.appendChild(userThings);
+    inputForm.appendChild(userContainer);
+    userContainer.appendChild(userThings);
     userThings.appendChild(logOutBtn);
     userFormDiv.appendChild(inputForm);
 
@@ -208,10 +212,28 @@ function logoutSection() {
     userFormDiv.innerHTML = "";
   }
 
-  const myOrdersDiv = document.querySelector("#myOrdersDiv");
-  myOrdersDiv.addEventListener("click", () => {
+  const myOrdersP = document.querySelector("#myOrdersP");
+  const ordernumberDiv = document.createElement('div');
+  ordernumberDiv.setAttribute('id', 'ordernumberDiv')
+
+  let orderDivOpen = false;
+
+  myOrdersP.addEventListener("click", () => {
     console.log("click on orders");
+
+
+  
+    if (orderDivOpen) {
+      ordernumberDiv.innerHTML = "";
+      orderDivOpen = false;
+    } else {
+      ordernumberDiv.innerHTML = "Your ordered orders:";
+      orderDivOpen = true;
+      getOrdersUser();
+    }
   });
+
+  myOrdersP.appendChild(ordernumberDiv);
 }
 
 function logoutHandler() {
@@ -231,7 +253,64 @@ function logoutHandler() {
  ************************ SHOW ORDERS ******************************
  *******************************************************************/
 
- 
+ function getOrdersUser() {
+  const ordernumberDiv = document.querySelector('#ordernumberDiv')
+    const user = localStorage.getItem("userId");
+    console.log(user);
+
+  fetch('http://localhost:3000/api/orders/user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({user: user})
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      let orderList = document.createElement('ul');
+      orderList.classList.add('orderList');
+      orderList.innerHTML = '';
+
+      data.map(item=> {
+        let li = document.createElement('li');
+        li.id= item._id;
+        li.innerText = item._id;
+
+        li.addEventListener('click', (event) => {
+          event.stopPropagation();
+          console.log(item._id);
+        });
+        orderList.appendChild(li)
+      })
+
+      ordernumberDiv.appendChild(orderList);
+    })
+
+
+
+  // console.log('function get orders connected');
+
+  // fetch("http://localhost:3000/api/users/set", {
+  //   credentials: "include",
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({}),
+  // })
+  // .then((response) => response.text())
+  // .then((data) => {
+  //   console.log(data);
+  //   // Render your HTML here
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
+  //console.log(document.cookie)
+ }
+
 
 /*******************************************************************
  ******************** SIGN UP SECTION ******************************

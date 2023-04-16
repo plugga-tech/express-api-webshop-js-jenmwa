@@ -73,12 +73,21 @@ router.get("/all/:token", async (request, response, next) => {
 // HÄMTA ORDERS FÖR EN USER // SKALL MISSLYCKAS = INGEN KEY  // SVARA MED 401 //SKALL LYCKAS = KEY
 router.post("/user", async (request, response, next) => {
   try {
-    //ta emot från post
-    const { user, token } = request.body;
-    console.log(user, token);
 
+    //ta emot från post
+    const { user } = request.body;
+    // const ordersByUser = {
+    //   user: request.body.user,
+    //   token: process.env.USER_TOKEN,
+    //   // token:request.cookies['userToken']
+    // }
+
+    console.log(user);
+    const token = process.env.USER_TOKEN;
+    // const token = request.cookies['userToken'];
     //kontrollera token
-    if (token !== process.env.ADMIN_TOKEN) {
+    // if (token !== process.env.ADMIN_TOKEN) {
+      if(!token) {
       return response.status(401).json({ message: "Unauthorized" });
     }
 
