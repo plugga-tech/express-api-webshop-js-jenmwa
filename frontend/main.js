@@ -281,6 +281,20 @@ function logoutHandler() {
         li.addEventListener('click', (event) => {
           event.stopPropagation();
           console.log(item._id);
+          console.log("click på order", event.target.id);
+          
+          let productsOfOrder = document.createElement('ul');
+          productsOfOrder.classList.add('productsOfOrder');
+          console.log(productsOfOrder.innerHTML="hej")
+          productsOfOrder.innerHTML = '';
+
+          item.products.map(product => {
+            let productLi = document.createElement('li');
+            productLi.innerText = `${product.quantity} x ${product.productId.name}`;
+            productsOfOrder.appendChild(productLi)
+          })
+
+          li.appendChild(productsOfOrder);
         });
         orderList.appendChild(li)
       })
@@ -310,6 +324,11 @@ function logoutHandler() {
   // });
   //console.log(document.cookie)
  }
+
+
+//  function printOrderInfo(id) {
+//   console.log('click on a specific order to see that order')
+// }
 
 
 /*******************************************************************
