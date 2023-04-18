@@ -276,7 +276,7 @@ function logoutHandler() {
       data.map(item=> {
         let li = document.createElement('li');
         li.id= item._id;
-        li.innerText = item._id;
+        li.innerText = `ordernr: `+ item._id;
 
         li.addEventListener('click', (event) => {
           event.stopPropagation();
@@ -285,15 +285,24 @@ function logoutHandler() {
           
           let productsOfOrder = document.createElement('ul');
           productsOfOrder.classList.add('productsOfOrder');
-          console.log(productsOfOrder.innerHTML="hej")
-          productsOfOrder.innerHTML = '';
+          // console.log(productsOfOrder.innerHTML="hej")
+          let productsContainer = li.querySelector('.productsContainer');
+          if(productsContainer) {
+            productsContainer.innerHTML = '';
+          } else {
+            productsContainer = document.createElement('div');
+            productsContainer.classList.add('productsContainer');
+            li.appendChild(productsContainer);
+          }
+     
 
-          item.products.map(product => {
+          item.products.map(data => {
             let productLi = document.createElement('li');
-            productLi.innerText = `${product.quantity} x ${product.productId.name}`;
-            productsOfOrder.appendChild(productLi)
+            console.log(data)
+            console.log(data.productName)
+            productLi.innerHTML = `${data.quantity} x ${data.productName}`;
+            productsOfOrder.appendChild(productLi);
           })
-
           li.appendChild(productsOfOrder);
         });
         orderList.appendChild(li)

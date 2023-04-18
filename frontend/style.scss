@@ -73,7 +73,7 @@ button {
 
 .inputForm {
     background-color:$baseColor;
-    height: 250px;
+    min-height: 250px;
     padding: 1rem 2rem;
 
     label {

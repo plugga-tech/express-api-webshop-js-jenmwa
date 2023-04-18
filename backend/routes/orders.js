@@ -74,7 +74,6 @@ router.get("/all/:token", async (request, response, next) => {
 router.post("/user", async (request, response, next) => {
   try {
 
-    //ta emot från post
     const { user } = request.body;
     // const ordersByUser = {
     //   user: request.body.user,
@@ -91,17 +90,41 @@ router.post("/user", async (request, response, next) => {
       return response.status(401).json({ message: "Unauthorized" });
     }
 
-    // //hämta user
     const findUser = await usersModels.findById(user);
     console.log(findUser);
     if (!findUser) {
       return response.status(404).json({ message: "User Not Found" });
     }
-    //hämta orders kopplade till user
+
     const orders = await ordersModels.find({ user: user });
     console.log(orders);
 
-    return response.status(201).json(orders);
+    for(let i = 0; i< orders.length; i++){
+      const order = orders[i];
+      console.log(order);
+        for(let j = 0; j< order.products.length; j++) {
+          const product = await productsModels.findById(order.products[j].productId);
+          console.log(product)
+          order.products[j].productName = product.name;
+          console.log(product.name)
+        }  
+    }
+
+    const ordersWithProductName = orders.map(order => {
+      return {
+        _id: order._id,
+        products: order.products.map(product => {
+          return {
+            quantity: product.quantity,
+            productName: product.productName  
+          };
+        })
+      };
+    });
+  
+    console.log(ordersWithProductName)
+    return response.status(201).json(ordersWithProductName); ;
+
   } catch (error) {
     console.error(error.message);
     response.status(500).json({ message: "Error" });
