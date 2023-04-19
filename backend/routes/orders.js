@@ -11,7 +11,7 @@ router.post("/add", async (request, response, next) => {
 
     const orderDetails = await ordersModels
       .findById(order._id)
-      .populate('products.productId');
+      .populate("products.productId");
 
     const products = order.products;
     // console.log(order.products)
@@ -26,13 +26,17 @@ router.post("/add", async (request, response, next) => {
           product.lager -= quantity;
           await product.save();
         } else {
-          return response.status(400).json({ message: `we're sorry, but we have not got enough ${product.name} in stock right now` });
+          return response
+            .status(400)
+            .json({
+              message: `we're sorry, but we have not got enough ${product.name} in stock right now`,
+            });
         }
       }
     }
 
     response.status(201).json(orderDetails);
-  } catch (error){
+  } catch (error) {
     console.error(error.message);
     response.status(500).json({ error: "Error" });
   }
@@ -62,7 +66,7 @@ router.get("/all/:token", async (request, response, next) => {
       return response.status(401).json({ message: "Unauthorized" });
     }
 
-    const orders = await ordersModels.find().populate('products.productId');
+    const orders = await ordersModels.find().populate("products.productId");
     response.status(200).json(orders);
   } catch (error) {
     console.error(error.message);
@@ -73,7 +77,6 @@ router.get("/all/:token", async (request, response, next) => {
 // HÄMTA ORDERS FÖR EN USER // SKALL MISSLYCKAS = INGEN KEY  // SVARA MED 401 //SKALL LYCKAS = KEY
 router.post("/user", async (request, response, next) => {
   try {
-
     const { user } = request.body;
     // const ordersByUser = {
     //   user: request.body.user,
@@ -86,7 +89,7 @@ router.post("/user", async (request, response, next) => {
     // const token = request.cookies['userToken'];
     //kontrollera token
     // if (token !== process.env.ADMIN_TOKEN) {
-      if(!token) {
+    if (!token) {
       return response.status(401).json({ message: "Unauthorized" });
     }
 
@@ -99,32 +102,33 @@ router.post("/user", async (request, response, next) => {
     const orders = await ordersModels.find({ user: user });
     console.log(orders);
 
-    for(let i = 0; i< orders.length; i++){
+    for (let i = 0; i < orders.length; i++) {
       const order = orders[i];
       console.log(order);
-        for(let j = 0; j< order.products.length; j++) {
-          const product = await productsModels.findById(order.products[j].productId);
-          console.log(product)
-          order.products[j].productName = product.name;
-          console.log(product.name)
-        }  
+      for (let j = 0; j < order.products.length; j++) {
+        const product = await productsModels.findById(
+          order.products[j].productId
+        );
+        console.log(product);
+        order.products[j].productName = product.name;
+        console.log(product.name);
+      }
     }
 
-    const ordersWithProductName = orders.map(order => {
+    const ordersWithProductName = orders.map((order) => {
       return {
         _id: order._id,
-        products: order.products.map(product => {
+        products: order.products.map((product) => {
           return {
             quantity: product.quantity,
-            productName: product.productName  
+            productName: product.productName,
           };
-        })
+        }),
       };
     });
-  
-    console.log(ordersWithProductName)
-    return response.status(201).json(ordersWithProductName); ;
 
+    console.log(ordersWithProductName);
+    return response.status(201).json(ordersWithProductName);
   } catch (error) {
     console.error(error.message);
     response.status(500).json({ message: "Error" });

@@ -30,9 +30,8 @@ router.get("/:id", async (request, response, next) => {
       return response.status(404).json({ message: "Product not found" });
     }
     response.status(200).json(product);
-  }
-  catch (error){
-    console.error(error.message)
+  } catch (error) {
+    console.error(error.message);
     response.status(500).json({ message: "Error" });
   }
 });
@@ -55,19 +54,19 @@ router.get("/:id", async (request, response, next) => {
 
 // SKAPA PRODUKT // UTAN TOKEN SÅ SKALL ANROPET MISSLYCKAS = 401
 router.post("/add", async (request, response, next) => {
-    try {
-      const { token } = request.body;
-      const userToken = process.env.ADMIN_TOKEN;
-      console.log('userToken', userToken);
-      
-      if (token !== userToken) {
-        response.status(401).json({message: "Unauthorized"});
-      } else {
-        const addedProduct = await productsModels.create(request.body);
-        response.status(201).json(addedProduct);
-      }
+  try {
+    const { token } = request.body;
+    const userToken = process.env.ADMIN_TOKEN;
+    console.log("userToken", userToken);
+
+    if (token !== userToken) {
+      response.status(401).json({ message: "Unauthorized" });
+    } else {
+      const addedProduct = await productsModels.create(request.body);
+      response.status(201).json(addedProduct);
+    }
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
     response.status(500).json({ error: "Error" });
   }
 });
@@ -77,21 +76,20 @@ router.get("/category/:id", async (request, response, next) => {
   try {
     const categoryId = request.params.id;
     console.log(categoryId);
-    
-    const categoryProducts = await productsModels.find({ category: categoryId });
+
+    const categoryProducts = await productsModels.find({
+      category: categoryId,
+    });
 
     //fungerar som felmeddelande i backend men tar emot fel i front... work in progress!
     // if (categoryProducts.length === 0) {
     //   return response.status(404).json({ error: "Category not found" });
     // }
     response.status(200).json(categoryProducts);
-  }
-  catch (error) {
-    console.error(error.message)
+  } catch (error) {
+    console.error(error.message);
     response.status(500).json({ error: "Error" });
   }
-})
-
+});
 
 module.exports = router;
-

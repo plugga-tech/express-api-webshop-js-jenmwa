@@ -140,7 +140,6 @@ function renderInputField() {
           userPasswordInput.value = "";
           logoutSection();
           renderShopCart();
-          
         } else {
           console.log("login failed.");
         }
@@ -184,14 +183,14 @@ function logoutSection() {
     inputForm.innerHTML = "";
 
     const userThings = document.createElement("div");
-    userThings.setAttribute('id', 'userThings')
+    userThings.setAttribute("id", "userThings");
 
     const logOutBtn = document.createElement("button");
     logOutBtn.setAttribute("id", "logOutBtn");
     logOutBtn.setAttribute("class", "logoutBtn");
 
-    const userContainer = document.createElement('div');
-    userContainer.setAttribute('id', 'userContainer')
+    const userContainer = document.createElement("div");
+    userContainer.setAttribute("id", "userContainer");
 
     userContainer.textContent = "YOUR ACCOUNT: ";
     userThings.innerHTML = `<div class="myOrdersDiv">
@@ -213,16 +212,14 @@ function logoutSection() {
   }
 
   const myOrdersP = document.querySelector("#myOrdersP");
-  const ordernumberDiv = document.createElement('div');
-  ordernumberDiv.setAttribute('id', 'ordernumberDiv')
+  const ordernumberDiv = document.createElement("div");
+  ordernumberDiv.setAttribute("id", "ordernumberDiv");
 
   let orderDivOpen = false;
 
   myOrdersP.addEventListener("click", () => {
     console.log("click on orders");
 
-
-  
     if (orderDivOpen) {
       ordernumberDiv.innerHTML = "";
       orderDivOpen = false;
@@ -253,36 +250,37 @@ function logoutHandler() {
  ************************ SHOW ORDERS ******************************
  *******************************************************************/
 
- function getOrdersUser() {
-  const ordernumberDiv = document.querySelector('#ordernumberDiv')
-    const user = localStorage.getItem("userId");
-    console.log(user);
+function getOrdersUser() {
+  const ordernumberDiv = document.querySelector("#ordernumberDiv");
+  const user = localStorage.getItem("userId");
+  console.log(user);
 
-  fetch('http://localhost:3000/api/orders/user', {
-    method: 'POST',
+  fetch("http://localhost:3000/api/orders/user", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({user: user})
+    body: JSON.stringify({ user: user }),
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
 
-      let orderList = document.createElement('ul');
-      orderList.classList.add('orderList');
-      orderList.innerHTML = '';
+      let orderList = document.createElement("ul");
+      orderList.classList.add("orderList");
+      orderList.innerHTML = "";
 
-      data.map(item=> {
-        let li = document.createElement('li');
-        li.id= item._id;
-        li.innerHTML = `ordernr: <span class='ordernumber'>`+ item._id + `</span>`;
+      data.map((item) => {
+        let li = document.createElement("li");
+        li.id = item._id;
+        li.innerHTML =
+          `ordernr: <span class='ordernumber'>` + item._id + `</span>`;
 
-        let productsContainer = li.querySelector('.productsContainer');
+        let productsContainer = li.querySelector(".productsContainer");
         if (productsContainer) {
-          li.removeEventListener('click', toggleProductsList);
+          li.removeEventListener("click", toggleProductsList);
         } else {
-          li.addEventListener('click', toggleProductsList);
+          li.addEventListener("click", toggleProductsList);
         }
 
         function toggleProductsList(event) {
@@ -290,32 +288,30 @@ function logoutHandler() {
           console.log(item._id);
           console.log("click på order", event.target.id);
 
-          productsContainer = li.querySelector('.productsContainer');
-          if(productsContainer) {
+          productsContainer = li.querySelector(".productsContainer");
+          if (productsContainer) {
             productsContainer.remove();
           } else {
-            productsContainer = document.createElement('div');
-            productsContainer.classList.add('productsContainer');
+            productsContainer = document.createElement("div");
+            productsContainer.classList.add("productsContainer");
             li.appendChild(productsContainer);
 
-            item.products.map(data => {
-              let productP = document.createElement('p');
-              productP.setAttribute('class','productP');
-              console.log(data)
-              console.log(data.productName)
+            item.products.map((data) => {
+              let productP = document.createElement("p");
+              productP.setAttribute("class", "productP");
+              console.log(data);
+              console.log(data.productName);
               productP.innerHTML = `${data.quantity} x ${data.productName}`;
               productsContainer.appendChild(productP);
-            })
+            });
           }
         }
 
-        orderList.appendChild(li)
-      })
+        orderList.appendChild(li);
+      });
 
       ordernumberDiv.appendChild(orderList);
-    })
-
-
+    });
 
   // console.log('function get orders connected');
 
@@ -336,13 +332,11 @@ function logoutHandler() {
   //   console.error(error);
   // });
   //console.log(document.cookie)
- }
-
+}
 
 //  function printOrderInfo(id) {
 //   console.log('click on a specific order to see that order')
 // }
-
 
 /*******************************************************************
  ******************** SIGN UP SECTION ******************************
