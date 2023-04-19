@@ -276,35 +276,39 @@ function logoutHandler() {
       data.map(item=> {
         let li = document.createElement('li');
         li.id= item._id;
-        li.innerText = `ordernr: `+ item._id;
+        li.innerHTML = `ordernr: <span class='ordernumber'>`+ item._id + `</span>`;
 
-        li.addEventListener('click', (event) => {
+        let productsContainer = li.querySelector('.productsContainer');
+        if (productsContainer) {
+          li.removeEventListener('click', toggleProductsList);
+        } else {
+          li.addEventListener('click', toggleProductsList);
+        }
+
+        function toggleProductsList(event) {
           event.stopPropagation();
           console.log(item._id);
           console.log("click på order", event.target.id);
-          
-          let productsOfOrder = document.createElement('ul');
-          productsOfOrder.classList.add('productsOfOrder');
-          // console.log(productsOfOrder.innerHTML="hej")
-          let productsContainer = li.querySelector('.productsContainer');
+
+          productsContainer = li.querySelector('.productsContainer');
           if(productsContainer) {
-            productsContainer.innerHTML = '';
+            productsContainer.remove();
           } else {
             productsContainer = document.createElement('div');
             productsContainer.classList.add('productsContainer');
             li.appendChild(productsContainer);
-          }
-     
 
-          item.products.map(data => {
-            let productLi = document.createElement('li');
-            console.log(data)
-            console.log(data.productName)
-            productLi.innerHTML = `${data.quantity} x ${data.productName}`;
-            productsOfOrder.appendChild(productLi);
-          })
-          li.appendChild(productsOfOrder);
-        });
+            item.products.map(data => {
+              let productP = document.createElement('p');
+              productP.setAttribute('class','productP');
+              console.log(data)
+              console.log(data.productName)
+              productP.innerHTML = `${data.quantity} x ${data.productName}`;
+              productsContainer.appendChild(productP);
+            })
+          }
+        }
+
         orderList.appendChild(li)
       })
 

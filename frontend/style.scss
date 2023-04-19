@@ -96,6 +96,24 @@ button {
 
 }
 
+
+
+.productP {
+    margin: 0 0 0 2rem;
+}
+.productP:last-child {
+    margin-bottom: 1rem;
+}
+
+.ordernumber, #myOrdersP {
+    font-weight: bold;
+
+    p, #ordernumberDiv  {
+        font-weight: 300;
+    }
+}
+
+
 .quoteDiv {
     font-style: italic;
     font-family: $secondaryFont;

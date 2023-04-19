@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const cors = require('cors')
+const cors = require('cors');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URI + 'jenny-waller', {
 
 app.use(cors(
   {
-    origin: 'http://127.0.0.1:5501',
+    origin: 'http://127.0.0.1:5500',
     credentials: true
   }
 
@@ -47,14 +47,14 @@ app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter)
 
-app.get('/set', function(req,res) {
-  res.cookie('userId', 'HEJ')
-  res.send('kaka sparad')
-})
+// app.get('/set', function(req,res) {
+//   res.cookie('userId', 'HEJ')
+//   res.send('kaka sparad')
+// })
 
-app.get('/cookies', function(req,res) {
-  console.log(req.cookies)
-  res.send('här är din kaka. userId: ' + req.cookies['userId'])
-})
+// app.get('/cookies', function(req,res) {
+//   console.log(req.cookies)
+//   res.send('här är din kaka. userId: ' + req.cookies['userId'])
+// })
 
 module.exports = app;
